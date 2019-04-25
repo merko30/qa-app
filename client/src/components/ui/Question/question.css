@@ -1,0 +1,7 @@
+.no-underline:hover {
+  text-decoration: none !important;
+}
+
+.word-wrap {
+  word-break: break-word;
+}
