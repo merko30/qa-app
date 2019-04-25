@@ -13,7 +13,7 @@ const findOne = async (req, res, next) => {
   try {
     const question = await Question.findOne({
       where: { id },
-      include: [{ model: User }, { model: Answer }]
+      include: [{ model: User }, { model: Answer, include: { model: User } }]
     });
     res.json({ question });
   } catch (error) {
@@ -39,8 +39,12 @@ const update = async (req, res, next) => {
   const { id } = req.params;
   const { text } = req.body;
   try {
-    const updatedQuestion = await Question.update({ text }, { where: { id } });
-    res.json({ question: updatedQuestion });
+    await Question.update({ text }, { where: { id } });
+    const withAssociations = await Question.findOne({
+      where: { id },
+      include: [{ model: User }, { model: Answer }]
+    });
+    res.json({ question: withAssociations });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -50,7 +54,7 @@ const remove = async (req, res, next) => {
   const { id } = req.params;
   try {
     await Question.destroy({ where: { id } });
-    res.json({ message: "Question deleted" });
+    res.json({ id });
   } catch (error) {
     res.status(400).json({ messsage: error.message });
   }

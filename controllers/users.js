@@ -15,7 +15,6 @@ const findAll = async (req, res, next) => {
 
 const register = async (req, res, next) => {
   const { username, name, email, password } = req.body;
-  console.log(req.body);
   try {
     const user = await User.findOne({ where: { email } });
     if (!user) {

@@ -1,4 +1,4 @@
-const { Answer } = require("../config/database");
+const { Answer, User } = require("../config/database");
 
 const create = async (req, res, next) => {
   const { text } = req.body;
@@ -9,7 +9,11 @@ const create = async (req, res, next) => {
       userId: req.user.id,
       questionId
     });
-    res.json({ answer });
+    const toReturn = await Answer.findOne({
+      where: { id: answer.id },
+      include: { model: User }
+    });
+    res.json({ answer: toReturn });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -19,8 +23,12 @@ const update = async (req, res, next) => {
   const { id } = req.params;
   const { text } = req.body;
   try {
-    const updatedAnswer = await Answer.update({ text }, { where: { id } });
-    res.json({ question: updatedAnswer });
+    await Answer.update({ text }, { where: { id } });
+    const newAnswer = await Answer.findOne({
+      where: { id },
+      include: { model: User }
+    });
+    res.json({ answer: newAnswer });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -30,7 +38,7 @@ const remove = async (req, res, next) => {
   const { id } = req.params;
   try {
     await Answer.destroy({ where: { id } });
-    res.json({ message: "Answer deleted" });
+    res.json({ id });
   } catch (error) {
     res.status(400).json({ messsage: error.message });
   }
