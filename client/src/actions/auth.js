@@ -55,10 +55,11 @@ export const login = data => async dispatch => {
     });
     const jsonResponse = await response.json();
     if (response.ok) {
-      const { token } = jsonResponse;
+      const { token, user } = jsonResponse;
       dispatch(loginSuccess());
       dispatch(clearError());
       localStorage.setItem("token", token);
+      localStorage.setItem("userId", parseInt(user.id));
       history.push("/login");
     } else {
       dispatch(loginFailure(jsonResponse));

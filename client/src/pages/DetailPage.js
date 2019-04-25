@@ -4,11 +4,12 @@ import { connect } from "react-redux";
 import { distanceInWordsToNow } from "date-fns";
 
 import { getQuestion } from "../actions/questions";
-import { addAnswer } from "../actions/answers";
+import { addAnswer, editAnswer, removeAnswer } from "../actions/answers";
 
 import Loading from "../components/ui/Loading";
 import CenterWrapper from "../components/layout/CenterWrapper";
 import AnswerForm from "../components/forms/AnswerForm";
+import AnswerList from "../components/ui/AnswerList";
 
 class DetailPage extends Component {
   componentDidMount() {
@@ -22,7 +23,14 @@ class DetailPage extends Component {
   }
 
   render() {
-    const { question, loading, loggedIn, addAnswer } = this.props;
+    const {
+      question,
+      loading,
+      loggedIn,
+      addAnswer,
+      editAnswer,
+      removeAnswer
+    } = this.props;
     return (
       <div>
         {loading && (
@@ -31,13 +39,13 @@ class DetailPage extends Component {
           </CenterWrapper>
         )}
         {question && (
-          <div class="container mx-auto mt-5">
+          <div className="container mx-auto mt-5">
             <h3 style={{ wordBreak: "break-word" }}>{question.text}</h3>
             <div>
-              <span class="badge">
+              <span className="badge">
                 {distanceInWordsToNow(question.createdAt)} ago
               </span>
-              <div class="pull-right">
+              <div className="pull-right">
                 <p>by {question.user.name}</p>
               </div>
             </div>
@@ -47,7 +55,12 @@ class DetailPage extends Component {
               loggedIn={loggedIn}
               questionId={question.id}
             />
-            {question.answers.map(a => JSON.stringify(a))}
+            <AnswerList
+              removeAnswer={removeAnswer}
+              answers={question.answers}
+              editAnswer={editAnswer}
+              questionId={question.id}
+            />
           </div>
         )}
       </div>
@@ -67,5 +80,5 @@ const mapStateToProps = ({
 
 export default connect(
   mapStateToProps,
-  { getQuestion, addAnswer }
+  { getQuestion, addAnswer, editAnswer, removeAnswer }
 )(DetailPage);

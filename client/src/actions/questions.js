@@ -8,8 +8,18 @@ import {
   ADD_QUESTION,
   ADD_QUESTION_FAILURE,
   ADD_QUESTION_SUCCESS,
-  UPDATE_QUESTION_ANSWERS
+  UPDATE_QUESTION_ANSWERS,
+  UPDATE_ANSWER_IN_QUESTION,
+  REMOVE_ANSWER_FROM_QUESTION,
+  REMOVE_QUESTION,
+  REMOVE_QUESTION_FAILURE,
+  REMOVE_QUESTION_SUCCESS,
+  EDIT_QUESTION,
+  EDIT_QUESTION_SUCCESS,
+  EDIT_QUESTION_FAILURE
 } from "../constants/questions";
+
+import { QuestionService } from "../utils/questions";
 
 export const fetchQuestions = () => ({ type: FETCH_QUESTIONS });
 export const fetchQuestionsSuccess = questions => ({
@@ -31,13 +41,13 @@ export const fetchQuestionFailure = error => ({
   payload: error
 });
 
-export const addQuestionRequest = () => ({ type: ADD_QUESTION });
-export const addQuestionSuccess = question => ({
-  type: ADD_QUESTION_SUCCESS,
+export const removeQuestionStart = () => ({ type: REMOVE_QUESTION });
+export const removeQuestionSuccess = question => ({
+  type: REMOVE_QUESTION_SUCCESS,
   payload: question
 });
-export const addQuestionFailure = error => ({
-  type: ADD_QUESTION_FAILURE,
+export const removeQuestionFailure = error => ({
+  type: REMOVE_QUESTION_FAILURE,
   payload: error
 });
 
@@ -74,6 +84,26 @@ export const addQuestion = data => async dispatch => {
   }
 };
 
+export const addQuestionRequest = () => ({ type: ADD_QUESTION });
+export const addQuestionSuccess = question => ({
+  type: ADD_QUESTION_SUCCESS,
+  payload: question
+});
+export const addQuestionFailure = error => ({
+  type: ADD_QUESTION_FAILURE,
+  payload: error
+});
+
+export const editQuestionStart = () => ({ type: EDIT_QUESTION });
+export const editQuestionSuccess = question => ({
+  type: EDIT_QUESTION_SUCCESS,
+  payload: question
+});
+export const editQuestionFailure = error => ({
+  type: EDIT_QUESTION_FAILURE,
+  payload: error
+});
+
 export const getQuestion = id => async dispatch => {
   dispatch(fetchQuestion());
   try {
@@ -89,6 +119,37 @@ export const getQuestion = id => async dispatch => {
   }
 };
 
+export const editQuestion = (questionId, data) => async dispatch => {
+  dispatch(editQuestionStart());
+  try {
+    const { question } = await QuestionService.editQuestionRequest(
+      questionId,
+      data
+    );
+    dispatch(editQuestionSuccess(question));
+  } catch (error) {
+    dispatch(editQuestionFailure(error));
+  }
+};
+
+export const removeQuestion = questionId => async dispatch => {
+  dispatch(removeQuestionStart());
+  try {
+    const question = await QuestionService.deleteQuestionRequest(questionId);
+    dispatch(removeQuestionSuccess(question));
+  } catch (error) {
+    dispatch(removeQuestionFailure(error));
+  }
+};
+
 export const updateQuestionAnswers = answer => dispatch => {
   dispatch({ type: UPDATE_QUESTION_ANSWERS, payload: answer });
+};
+
+export const updateAnswerInQuestions = answer => dispatch => {
+  dispatch({ type: UPDATE_ANSWER_IN_QUESTION, payload: answer });
+};
+
+export const removeAnswerFromQuestion = answer => dispatch => {
+  dispatch({ type: REMOVE_ANSWER_FROM_QUESTION, payload: answer });
 };

@@ -10,23 +10,30 @@ const answerSchema = Yup.object().shape({
     .required("Required")
 });
 
-export default class AnswerForm extends React.Component {
+class AnswerForm extends React.Component {
+  submit = async (values, { resetForm }) => {
+    const { handleClose, onSubmit, mode, questionId, answer } = this.props;
+    if (mode === "edit") {
+      await onSubmit(questionId, answer.id, { text: values.answer });
+      handleClose();
+    }
+    onSubmit(questionId, { text: values.answer });
+    resetForm();
+  };
+
   render() {
-    const { onSubmit, answer, mode = "add", loggedIn, questionId } = this.props;
+    const { answer, mode = "add", loggedIn } = this.props;
     return (
       <Formik
         initialValues={{
-          answer: mode === "edit" ? answer : ""
+          answer: mode === "edit" ? answer.text : ""
         }}
         validationSchema={answerSchema}
-        onSubmit={values => {
-          onSubmit(questionId, { text: values.answer });
-        }}
+        onSubmit={this.submit}
         render={({ isSubmitting }) => {
           return (
-            <Form>
+            <Form disabled={!loggedIn} className="d-block">
               <Field
-                disabled={!loggedIn}
                 type="text"
                 name="answer"
                 placeholder="Answer the question"
@@ -43,3 +50,5 @@ export default class AnswerForm extends React.Component {
     );
   }
 }
+
+export default AnswerForm;

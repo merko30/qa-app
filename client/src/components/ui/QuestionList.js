@@ -4,12 +4,19 @@ import Question from "./Question";
 
 export default class QuestionList extends PureComponent {
   render() {
-    const { questions } = this.props;
+    const { questions, editQuestion, removeQuestion } = this.props;
     return (
       <div className="row mt-5">
         {questions &&
           questions.map(q => {
-            return <Question question={q} key={q.id} />;
+            return (
+              <Question
+                question={q}
+                key={q.id}
+                editQuestion={editQuestion}
+                removeQuestion={removeQuestion}
+              />
+            );
           })}
       </div>
     );

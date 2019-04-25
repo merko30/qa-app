@@ -13,15 +13,21 @@ const questionSchema = Yup.object().shape({
 export default class QuestionForm extends React.Component {
   render() {
     const { onSubmit, question, mode = "add", handleClose } = this.props;
+    const editMode = mode === "edit";
     return (
       <Formik
         initialValues={{
-          question: mode === "edit" ? question : ""
+          question: editMode ? question.text : ""
         }}
         validationSchema={questionSchema}
         onSubmit={async values => {
-          await onSubmit({ text: values.question });
-          handleClose();
+          if (editMode) {
+            await onSubmit(question.id, { text: values.question });
+            handleClose();
+          } else {
+            await onSubmit({ text: values.question });
+            handleClose();
+          }
         }}
         render={({ isSubmitting }) => {
           return (
