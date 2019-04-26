@@ -41,8 +41,8 @@ class Question extends Component {
       editQuestion,
       loggedIn
     } = this.props;
-    const userID = parseInt(localStorage.getItem("userId"));
-    const userMatchesAuthor = loggedIn && userID && userID === userId;
+    const userID = localStorage.getItem("userId");
+    const userMatchesAuthor = loggedIn && userID && parseInt(userID) === userId;
     const { show } = this.state;
     return (
       <div className="col-md-8 col-md-offset-2 col-sm-12 col-xs-12 mx-auto">
