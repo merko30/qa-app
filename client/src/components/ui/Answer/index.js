@@ -38,6 +38,7 @@ export default class Answer extends Component {
             onSubmit={onSubmit}
             questionId={questionId}
             handleClose={this.handleClose}
+            loggedIn={loggedIn}
           />
         </MyModal>
 

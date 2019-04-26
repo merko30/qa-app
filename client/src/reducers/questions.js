@@ -108,6 +108,7 @@ export default function(state = initialState, action) {
       newQuestions[indexOfUpdated] = updatedAnswer;
       return {
         ...state,
+        loading: false,
         questions: newQuestions
       };
     case REMOVE_QUESTION_SUCCESS:
@@ -117,7 +118,8 @@ export default function(state = initialState, action) {
       );
       return {
         ...state,
-        questions: remainingQuestions
+        questions: remainingQuestions,
+        loading: false
       };
     default:
       return state;

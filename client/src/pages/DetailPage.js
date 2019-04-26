@@ -6,7 +6,7 @@ import { distanceInWordsToNow } from "date-fns";
 import { getQuestion } from "../actions/questions";
 import { addAnswer, editAnswer, removeAnswer } from "../actions/answers";
 
-import {Loading, AnswerList } from "../components/ui";
+import { Loading, AnswerList, Error } from "../components/ui";
 import CenterWrapper from "../components/layout/CenterWrapper";
 import AnswerForm from "../components/forms/AnswerForm";
 
@@ -28,7 +28,8 @@ class DetailPage extends Component {
       loggedIn,
       addAnswer,
       editAnswer,
-      removeAnswer
+      removeAnswer,
+      error
     } = this.props;
     return (
       <div>
@@ -37,7 +38,8 @@ class DetailPage extends Component {
             <Loading />
           </CenterWrapper>
         )}
-        {question && (
+        {error && <Error error={error} />}
+        {question && !error && !loading && (
           <div className="container mx-auto mt-5">
             <h3 style={{ wordBreak: "break-word" }}>{question.text}</h3>
             <div>

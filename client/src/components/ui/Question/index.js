@@ -45,15 +45,21 @@ class Question extends Component {
     const userMatchesAuthor = loggedIn && userID && parseInt(userID) === userId;
     const { show } = this.state;
     return (
-      <div className="col-md-8 col-md-offset-2 col-sm-12 col-xs-12 mx-auto">
+      <div className="col-md-8 col-md-offset-2 col-sm-12 col-xs-12 mx-auto my-2">
         <div className="d-flex align-items-center w-100">
           <AnswerCount answers={answers} />
           <div className="d-flex align-items-center justify-content-between w-100">
             <Link to={`/questions/${id}`} className="text-dark no-underline">
               <h3 className="col-10 word-wrap my-2 pl-4 pr-0">{text}</h3>
+              <div className="d-flex pl-4">
+                <p className="mb-0 mr-2">
+                  <strong>{name}</strong>
+                </p>
+                <p>{distanceInWordsToNow(createdAt)} ago</p>
+              </div>
             </Link>
             {userMatchesAuthor && (
-              <div>
+              <div className="align-self-start d-flex cursor-pointer">
                 <Icon icon={faPen} onClick={this.handleShow} />
                 <MyModal handleClose={this.handleClose} show={show}>
                   <QuestionForm
@@ -68,9 +74,6 @@ class Question extends Component {
             )}
           </div>
         </div>
-        <p className="d-block text-right mt-2 px-2 rounded">
-          asked by <strong>{name}</strong> {distanceInWordsToNow(createdAt)} ago
-        </p>
       </div>
     );
   }

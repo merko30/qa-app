@@ -5,3 +5,20 @@
 .word-wrap {
   word-break: break-word;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.question-border {
+  border: 1px solid #ededed;
+  border-radius: 1em;
+}
+
+.count-position {
+  left: 0px;
+  right: 0px;
+  top: 25px;
+  margin: 0px auto 0px 19px;
+  color: white;
+}

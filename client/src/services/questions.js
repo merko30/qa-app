@@ -25,7 +25,6 @@ export class QuestionService {
   };
 
   static editQuestionRequest = async (questionId, data) => {
-    const token = localStorage.getItem("token");
     const question = await (await request(
       `/api/q/${questionId}`,
       "PUT",
@@ -37,7 +36,6 @@ export class QuestionService {
   };
 
   static deleteQuestionRequest = async questionId => {
-    const token = localStorage.getItem("token");
     const question = await (await request(`/api/q/${questionId}`, "DELETE", {
       Authorization: token()
     })).json();
