@@ -1,92 +1,48 @@
 import {
-  ADD_ANSWER,
-  ADD_ANSWER_SUCCESS,
-  ADD_ANSWER_FAILURE,
-  EDIT_ANSWER,
-  EDIT_ANSWER_SUCCESS,
-  EDIT_ANSWER_FAILURE,
-  DELETE_ANSWER,
-  DELETE_ANSWER_SUCCESS,
-  DELETE_ANSWER_FAILURE
-} from "../constants/answers";
-import {
   updateQuestionAnswers,
   updateAnswerInQuestions,
   removeAnswerFromQuestion
 } from "./questions";
-import { AnswerService } from "../utils/answers";
+import AnswerService from "../services/answers";
+import createAction from "../utils/createAction";
 
-export const addAnswerRequest = () => ({ type: ADD_ANSWER });
-export const addAnswerSuccess = answer => ({
-  type: ADD_ANSWER_SUCCESS,
-  payload: answer
-});
-export const addAnswerFailure = error => ({
-  type: ADD_ANSWER_FAILURE,
-  payload: error
-});
-
-export const editAnswerStart = () => ({ type: EDIT_ANSWER });
-export const editAnswerSuccess = answer => ({
-  type: EDIT_ANSWER_SUCCESS,
-  payload: answer
-});
-export const editAnswerFailure = error => ({
-  type: EDIT_ANSWER_FAILURE,
-  payload: error
-});
-
-export const deleteAnswerStart = () => ({ type: DELETE_ANSWER });
-export const deleteAnswerSuccess = answer => ({
-  type: DELETE_ANSWER_SUCCESS,
-  payload: answer
-});
-export const deleteAnswerFailure = error => ({
-  type: DELETE_ANSWER_FAILURE,
-  payload: error
-});
+const add = createAction("ADD_ANSWER");
+const edit = createAction("EDIT_ANSWER");
+const remove = createAction("DELETE_ANSWER");
 
 export const addAnswer = (questionId, data) => async dispatch => {
-  const token = localStorage.getItem("token");
-  dispatch(addAnswerRequest());
+  dispatch(add.start());
   try {
-    const answer = await (await fetch(`/api/a/${questionId}`, {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + token,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })).json();
-    dispatch(addAnswerSuccess(answer.answer));
-    dispatch(updateQuestionAnswers(answer.answer));
+    const { answer } = await AnswerService.addAnswerRequest(questionId, data);
+    dispatch(add.success(answer));
+    dispatch(updateQuestionAnswers(answer));
   } catch (error) {
-    dispatch(addAnswerFailure(error));
+    dispatch(add.failure(error));
   }
 };
 
 export const editAnswer = (questionId, answerId, data) => async dispatch => {
-  dispatch(editAnswerStart());
+  dispatch(edit.start());
   try {
     const { answer } = await AnswerService.editAnswerRequest(
       questionId,
       answerId,
       data
     );
-    dispatch(editAnswerSuccess(answer));
+    dispatch(edit.success(answer));
     dispatch(updateAnswerInQuestions(answer));
   } catch (error) {
-    dispatch(editAnswerFailure(error));
+    dispatch(edit.failure(error));
   }
 };
 
 export const removeAnswer = answerId => async dispatch => {
-  dispatch(deleteAnswerStart());
+  dispatch(remove.start());
   try {
     const answer = await AnswerService.deleteAnswerRequest(answerId);
-    dispatch(deleteAnswerSuccess(answer));
+    dispatch(remove.success(answer));
     dispatch(removeAnswerFromQuestion(answer));
   } catch (error) {
-    dispatch(deleteAnswerFailure(error));
+    dispatch(remove.failure(error));
   }
 };

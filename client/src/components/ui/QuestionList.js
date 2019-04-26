@@ -4,7 +4,7 @@ import Question from "./Question";
 
 export default class QuestionList extends PureComponent {
   render() {
-    const { questions, editQuestion, removeQuestion } = this.props;
+    const { questions, editQuestion, removeQuestion, loggedIn } = this.props;
     return (
       <div className="row mt-5">
         {questions &&
@@ -15,6 +15,7 @@ export default class QuestionList extends PureComponent {
                 key={q.id}
                 editQuestion={editQuestion}
                 removeQuestion={removeQuestion}
+                loggedIn={loggedIn}
               />
             );
           })}

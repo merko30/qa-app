@@ -1,11 +1,11 @@
-const request = (url, method, additionalHeaders = {}, body = {}) => {
-  return fetch(url, {
+const request = async (url, method, additionalHeaders = {}, body = {}) => {
+  return await fetch(url, {
     method,
     headers: {
       "Content-Type": "application/json",
       ...additionalHeaders
     },
-    body: JSON.stringify(body)
+    body: method !== "GET" ? JSON.stringify(body) : null
   });
 };
 

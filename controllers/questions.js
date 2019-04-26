@@ -1,11 +1,15 @@
 const { Question, User, Answer } = require("../config/database");
 
 const findAll = async (req, res, next) => {
-  const questions = await Question.findAll({
-    include: [{ model: User }, { model: Answer }],
-    order: [["createdAt", "DESC"]]
-  });
-  res.json({ questions });
+  try {
+    const questions = await Question.findAll({
+      include: [{ model: User }, { model: Answer }],
+      order: [["createdAt", "DESC"]]
+    });
+    res.json({ questions });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const findOne = async (req, res, next) => {
@@ -17,7 +21,7 @@ const findOne = async (req, res, next) => {
     });
     res.json({ question });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -31,7 +35,7 @@ const create = async (req, res, next) => {
     });
     res.json({ question: withAssociations });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -46,7 +50,7 @@ const update = async (req, res, next) => {
     });
     res.json({ question: withAssociations });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -56,7 +60,7 @@ const remove = async (req, res, next) => {
     await Question.destroy({ where: { id } });
     res.json({ id });
   } catch (error) {
-    res.status(400).json({ messsage: error.message });
+    next(error);
   }
 };
 

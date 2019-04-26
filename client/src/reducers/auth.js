@@ -19,6 +19,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case REGISTER_REQUEST:
+    case LOGIN_REQUEST:
       return {
         ...state,
         loading: true
@@ -29,27 +30,17 @@ export default function(state = initialState, action) {
         loading: false
       };
     case REGISTER_FAILURE:
+    case LOGIN_FAILURE:
       return {
         ...state,
         loading: false,
         error: action.payload.message
-      };
-    case LOGIN_REQUEST:
-      return {
-        ...state,
-        loading: true
       };
     case LOGIN_SUCCESS:
       return {
         ...state,
         loading: false,
         loggedIn: true
-      };
-    case LOGIN_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload.message
       };
     case LOGOUT:
       return {

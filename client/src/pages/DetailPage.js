@@ -6,10 +6,9 @@ import { distanceInWordsToNow } from "date-fns";
 import { getQuestion } from "../actions/questions";
 import { addAnswer, editAnswer, removeAnswer } from "../actions/answers";
 
-import Loading from "../components/ui/Loading";
+import {Loading, AnswerList } from "../components/ui";
 import CenterWrapper from "../components/layout/CenterWrapper";
 import AnswerForm from "../components/forms/AnswerForm";
-import AnswerList from "../components/ui/AnswerList";
 
 class DetailPage extends Component {
   componentDidMount() {
@@ -60,6 +59,7 @@ class DetailPage extends Component {
               answers={question.answers}
               editAnswer={editAnswer}
               questionId={question.id}
+              loggedIn={loggedIn}
             />
           </div>
         )}

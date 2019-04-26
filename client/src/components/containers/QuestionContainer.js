@@ -9,6 +9,7 @@ import {
 } from "../../actions/questions";
 import CenterWrapper from "../layout/CenterWrapper";
 import Loading from "../ui/Loading";
+import Error from "../ui/Error";
 
 class QuestionContainer extends Component {
   componentDidMount() {
@@ -17,14 +18,23 @@ class QuestionContainer extends Component {
   }
 
   render() {
-    const { questions, loading, removeQuestion, editQuestion } = this.props;
+    const {
+      questions,
+      loading,
+      removeQuestion,
+      editQuestion,
+      loggedIn,
+      error
+    } = this.props;
     return (
       <div>
+        {error && <Error error={error} />}
         {questions && (
           <QuestionList
             questions={questions}
             editQuestion={editQuestion}
             removeQuestion={removeQuestion}
+            loggedIn={loggedIn}
           />
         )}
         {loading && (
@@ -37,10 +47,14 @@ class QuestionContainer extends Component {
   }
 }
 
-const mapStateToProps = ({ questions: { questions, loading, error } }) => ({
+const mapStateToProps = ({
+  questions: { questions, loading, error },
+  auth: { loggedIn }
+}) => ({
   questions,
   loading,
-  error
+  error,
+  loggedIn
 });
 
 export default connect(

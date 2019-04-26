@@ -32,15 +32,16 @@ class AnswerForm extends React.Component {
         onSubmit={this.submit}
         render={({ isSubmitting }) => {
           return (
-            <Form disabled={!loggedIn} className="d-block">
+            <Form className="d-block">
               <Field
+                disabled={!loggedIn}
                 type="text"
                 name="answer"
                 placeholder="Answer the question"
                 component={TextArea}
               />
 
-              <Button variant="success" type="submit">
+              <Button variant="success" type="submit" disabled={!loggedIn}>
                 {mode[0] + mode.slice(1)} answer
               </Button>
             </Form>

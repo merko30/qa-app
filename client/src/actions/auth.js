@@ -1,71 +1,48 @@
-import {
-  REGISTER_REQUEST,
-  REGISTER_SUCCESS,
-  REGISTER_FAILURE,
-  LOGIN_REQUEST,
-  LOGIN_SUCCESS,
-  LOGIN_FAILURE,
-  LOGOUT,
-  CLEAR_ERROR,
-  SET_STATUS
-} from "../constants/auth";
+import { LOGOUT, CLEAR_ERROR, SET_STATUS } from "../constants/auth";
 
+import createAction from "../utils/createAction";
 import history from "../config/history";
+import { AuthService } from "../services/auth";
 
-const registerRequest = () => ({ type: REGISTER_REQUEST });
-const registerSuccess = () => ({ type: REGISTER_SUCCESS });
-const registerFailure = error => ({ type: REGISTER_FAILURE, payload: error });
-
-const loginRequest = () => ({ type: LOGIN_REQUEST });
-const loginSuccess = () => ({ type: LOGIN_SUCCESS });
-const loginFailure = error => ({ type: LOGIN_FAILURE, payload: error });
+const registerAction = createAction("REGISTER");
+const loginAction = createAction("LOGIN");
 
 export const register = data => async dispatch => {
-  dispatch(registerRequest());
+  dispatch(registerAction.start());
   try {
-    const response = await fetch("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "content-type": "application/json"
-      }
-    });
+    const response = await AuthService.registerRequest(data);
+
     const jsonResponse = await response.json();
     if (response.ok) {
-      dispatch(registerSuccess());
+      dispatch(registerAction.success());
       dispatch(clearError());
       history.push("/login");
     } else {
-      dispatch(registerFailure(jsonResponse));
+      dispatch(registerAction.success(jsonResponse));
     }
   } catch (error) {
-    dispatch(registerFailure(error));
+    dispatch(registerAction.failure(error));
   }
 };
 
 export const login = data => async dispatch => {
-  dispatch(loginRequest());
+  dispatch(loginAction.start());
   try {
-    const response = await fetch("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "content-type": "application/json"
-      }
-    });
+    const response = await AuthService.loginRequest(data);
     const jsonResponse = await response.json();
+    console.log(response);
     if (response.ok) {
       const { token, user } = jsonResponse;
-      dispatch(loginSuccess());
+      dispatch(loginAction.success());
       dispatch(clearError());
       localStorage.setItem("token", token);
       localStorage.setItem("userId", parseInt(user.id));
       history.push("/login");
     } else {
-      dispatch(loginFailure(jsonResponse));
+      dispatch(loginAction.failure(jsonResponse));
     }
   } catch (error) {
-    dispatch(loginFailure(error));
+    dispatch(loginAction.failure(error));
   }
 };
 

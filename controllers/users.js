@@ -9,7 +9,7 @@ const findAll = async (req, res, next) => {
     const users = await User.findAll({ include: [{ model: Question }] });
     res.json({ users });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -29,7 +29,7 @@ const register = async (req, res, next) => {
       throw new Error("User exists");
     }
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -49,7 +49,7 @@ const login = async (req, res, next) => {
       }
     }
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 

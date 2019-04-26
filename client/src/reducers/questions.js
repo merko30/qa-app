@@ -47,7 +47,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        question: action.payload.question
+        question: action.payload
       };
     case FETCH_QUESTIONS_FAILURE:
     case FETCH_QUESTION_FAILURE:

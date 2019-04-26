@@ -26,9 +26,9 @@ export default class Answer extends Component {
 
   render() {
     const { show } = this.state;
-    const { answer, onSubmit, questionId } = this.props;
+    const { answer, onSubmit, questionId, loggedIn } = this.props;
     const userID = parseInt(localStorage.getItem("userId"));
-    const userMatchesAuthor = userID && userID === answer.userId;
+    const userMatchesAuthor = loggedIn && userID && userID === answer.userId;
     return (
       <div className="row">
         <MyModal handleClose={this.handleClose} show={show}>
