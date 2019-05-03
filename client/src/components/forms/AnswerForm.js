@@ -1,8 +1,9 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import TextArea from "./components/TextArea";
 import Button from "react-bootstrap/Button";
+
+import TextArea from "../TextArea";
 
 const answerSchema = Yup.object().shape({
   answer: Yup.string()

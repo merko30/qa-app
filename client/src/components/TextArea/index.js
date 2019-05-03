@@ -1,6 +1,6 @@
 import React from "react";
 
-const TextField = ({
+const TextArea = ({
   field, // { name, value, onChange, onBlur }
   form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
   ...props
@@ -15,4 +15,4 @@ const TextField = ({
   </div>
 );
 
-export default TextField;
+export default TextArea;

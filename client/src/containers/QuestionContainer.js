@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import QuestionList from "../ui/QuestionList";
+import QuestionList from "../components/ui/QuestionList";
 import {
   getQuestions,
   removeQuestion,
   editQuestion
-} from "../../actions/questions";
+} from "../actions/questions";
 import CenterWrapper from "../layout/CenterWrapper";
-import Loading from "../ui/Loading";
-import Error from "../ui/Error";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
 
 class QuestionContainer extends Component {
   componentDidMount() {

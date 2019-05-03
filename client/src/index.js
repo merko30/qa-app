@@ -7,7 +7,7 @@ import { Router } from "react-router-dom";
 import history from "./config/history";
 
 import store from "./config/store";
-import checkUser from "./config/checkUser";
+import checkUser from "./utils/checkUser";
 
 checkUser(store);
 

@@ -3,7 +3,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 
-import TextField from "./components/TextField";
+import TextField from "../TextField";
 
 const loginSchema = Yup.object().shape({
   password: Yup.string()

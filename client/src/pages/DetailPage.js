@@ -5,9 +5,13 @@ import { distanceInWordsToNow } from "date-fns";
 
 import { getQuestion } from "../actions/questions";
 import { addAnswer, editAnswer, removeAnswer } from "../actions/answers";
+import { like, dislike } from "../actions/likes";
+import { addComment } from "../actions/comments";
 
-import { Loading, AnswerList, Error } from "../components/ui";
-import CenterWrapper from "../components/layout/CenterWrapper";
+import AnswerList from "../components/ui/AnswerList";
+import Loading from "../components/Loading";
+import Error from "../components/Error";
+import CenterWrapper from "../layout/CenterWrapper";
 import AnswerForm from "../components/forms/AnswerForm";
 
 class DetailPage extends Component {
@@ -29,7 +33,10 @@ class DetailPage extends Component {
       addAnswer,
       editAnswer,
       removeAnswer,
-      error
+      error,
+      like,
+      dislike,
+      addComment
     } = this.props;
     return (
       <div>
@@ -62,6 +69,9 @@ class DetailPage extends Component {
               editAnswer={editAnswer}
               questionId={question.id}
               loggedIn={loggedIn}
+              like={like}
+              dislike={dislike}
+              addComment={addComment}
             />
           </div>
         )}
@@ -82,5 +92,13 @@ const mapStateToProps = ({
 
 export default connect(
   mapStateToProps,
-  { getQuestion, addAnswer, editAnswer, removeAnswer }
+  {
+    getQuestion,
+    addAnswer,
+    editAnswer,
+    removeAnswer,
+    like,
+    dislike,
+    addComment
+  }
 )(DetailPage);

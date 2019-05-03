@@ -1,4 +1,4 @@
-const { Answer, Question } = require("../config/database");
+const { Answer, Question, Like, Comment } = require("../config/database");
 
 module.exports = param =>
   async function(req, res, next) {
@@ -10,6 +10,12 @@ module.exports = param =>
       doc = await Question.findOne({ where: { id } });
     } else if (param === "answer") {
       doc = await Answer.findOne({ where: { id } });
+    } else if (param === "like") {
+      doc = await Like.findOne({ where: { id } });
+      console.log(id);
+      console.log(doc);
+    } else if (param === "comment") {
+      doc = await Comment.findOne({ where: { id } });
     }
     const matches = doc.userId === req.user.id;
     if (matches) {

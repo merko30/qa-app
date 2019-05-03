@@ -1,8 +1,9 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import TextField from "./components/TextField";
 import Button from "react-bootstrap/Button";
+
+import TextField from "../TextField";
 
 const registerSchema = Yup.object().shape({
   password: Yup.string()

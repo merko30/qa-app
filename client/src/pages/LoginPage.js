@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { LoginForm } from "../components/forms";
-
 import { connect } from "react-redux";
 
+import LoginForm from "../components/forms/LoginForm";
+import FormWrapper from "../layout/FormWrapper";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
+
 import { login } from "../actions/auth";
-import Error from "../components/ui/Error";
-import Loading from "../components/ui/Loading";
-import FormWrapper from "../components/layout/FormWrapper";
 
 class LoginPage extends Component {
   onSubmit = data => {

@@ -11,12 +11,7 @@ const {
   update
 } = require("../controllers/questions");
 
-const checkAuthorMiddleware = require("../utils/checkAuthorMiddleware");
-
-const middlewares = [
-  passport.authenticate("jwt", { session: false }),
-  checkAuthorMiddleware("question")
-];
+const middlewares = require("../config/authorMiddleware");
 
 router
   .route("/")
@@ -26,7 +21,7 @@ router
 router
   .route("/:id")
   .get(findOne)
-  .delete(middlewares, remove)
-  .put(middlewares, update);
+  .delete(middlewares("question"), remove)
+  .put(middlewares("question"), update);
 
 module.exports = router;

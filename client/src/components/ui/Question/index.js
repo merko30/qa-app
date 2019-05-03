@@ -2,12 +2,12 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { distanceInWordsToNow } from "date-fns";
 
-import Icon from "../Icon";
-import MyModal from "../../layout/Modal";
-import QuestionForm from "../../forms/QuestionForm";
-
-import "./question.css";
 import { faPen, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import "./question.css";
+
+import QuestionForm from "../../forms/QuestionForm";
+import MyModal from "../../../layout/Modal";
+import Icon from "../../Icon";
 import AnswerCount from "./AnswerCount";
 
 class Question extends Component {

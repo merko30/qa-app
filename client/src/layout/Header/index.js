@@ -1,17 +1,16 @@
 import React, { Component } from "react";
-import { Navbar, Nav, Button } from "react-bootstrap";
-
-import NavItem from "./NavItem";
-
-import "./header.css";
-import MyModal from "../Modal";
-import QuestionForm from "../../forms/QuestionForm";
-
 import { connect } from "react-redux";
 
-import { addQuestion } from "../../../actions/questions";
+import { Navbar, Nav, Button } from "react-bootstrap";
+import "./header.css";
 
-import { logout } from "../../../actions/auth";
+import QuestionForm from "../../components/forms/QuestionForm";
+import MyModal from "../Modal";
+import NavItem from "./NavItem";
+
+import { addQuestion } from "../../actions/questions";
+
+import { logout } from "../../actions/auth";
 
 class Header extends Component {
   state = {

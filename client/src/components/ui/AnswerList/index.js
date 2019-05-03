@@ -1,15 +1,18 @@
 import React, { PureComponent } from "react";
 
-import Answer from "./Answer";
+import Answer from "../Answer";
 
-export default class AnswerList extends PureComponent {
+class AnswerList extends PureComponent {
   render() {
     const {
       answers,
       editAnswer,
       questionId,
       removeAnswer,
-      loggedIn
+      loggedIn,
+      like,
+      dislike,
+      addComment
     } = this.props;
 
     return (
@@ -24,6 +27,9 @@ export default class AnswerList extends PureComponent {
                 questionId={questionId}
                 removeAnswer={removeAnswer}
                 loggedIn={loggedIn}
+                like={like}
+                dislike={dislike}
+                addComment={addComment}
               />
             );
           })}
@@ -31,3 +37,5 @@ export default class AnswerList extends PureComponent {
     );
   }
 }
+
+export default AnswerList;

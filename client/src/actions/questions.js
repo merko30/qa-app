@@ -24,16 +24,6 @@ export const getQuestions = () => async dispatch => {
   }
 };
 
-export const addQuestion = data => async dispatch => {
-  dispatch(add.start());
-  try {
-    const { question } = await QuestionService.addQuestionRequest(data);
-    dispatch(add.success(question));
-  } catch (error) {
-    dispatch(add.failure(error));
-  }
-};
-
 export const getQuestion = id => async dispatch => {
   dispatch(fetchOne.start());
   try {
@@ -41,6 +31,16 @@ export const getQuestion = id => async dispatch => {
     dispatch(fetchOne.success(question));
   } catch (error) {
     dispatch(fetchOne.failure(error));
+  }
+};
+
+export const addQuestion = data => async dispatch => {
+  dispatch(add.start());
+  try {
+    const { question } = await QuestionService.addQuestionRequest(data);
+    dispatch(add.success(question));
+  } catch (error) {
+    dispatch(add.failure(error));
   }
 };
 

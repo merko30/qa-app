@@ -1,27 +1,27 @@
-const { Answer, User, Comment, Like } = require("../config/database");
+const { Comment, User, Like, Answer } = require("../config/database");
 
 const include = [
   { model: User },
-  { model: Comment, include: { model: User } },
-  { model: Like, include: { model: User } }
+  { model: Like, include: { model: User } },
+  { model: Comment, include: { model: User } }
 ];
 
 const create = async (req, res, next) => {
   const { text } = req.body;
-  const { questionId } = req.params;
+  const { answerId } = req.params;
   try {
-    const answer = await Answer.create({
+    await Comment.create({
       text,
       userId: req.user.id,
-      questionId
+      answerId
     });
     const toReturn = await Answer.findOne({
-      where: { id: answer.id },
+      where: { id: answerId },
       include
     });
     res.json({ answer: toReturn });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -29,21 +29,21 @@ const update = async (req, res, next) => {
   const { id } = req.params;
   const { text } = req.body;
   try {
-    await Answer.update({ text }, { where: { id } });
-    const newAnswer = await Answer.findOne({
+    await Comment.update({ text }, { where: { id } });
+    const newComment = await Comment.findOne({
       where: { id },
-      include
+      include: { model: User }
     });
-    res.json({ answer: newAnswer });
+    res.json({ comment: newComment });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
 const remove = async (req, res, next) => {
   const { id } = req.params;
   try {
-    await Answer.destroy({ where: { id } });
+    await Comment.destroy({ where: { id } });
     res.json({ id });
   } catch (error) {
     res.status(400).json({ messsage: error.message });

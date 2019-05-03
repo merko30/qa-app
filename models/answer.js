@@ -9,19 +9,18 @@ module.exports = (sequelize, type) => {
       type: type.STRING,
       validate: {
         len: {
-          args: [6, 150],
-          msg: "Answer must have at least 6 characters."
+          args: [12, 150],
+          msg: "Answer must have at least 12 characters."
         }
       }
     }
   });
 
-  Answer.associate = models => {
-    Answer.belongsTo(models.Question);
-  };
-
-  Answer.associate = models => {
-    Answer.belongsTo(models.Answer);
+  Answer.associate = ({ User, Question, Comment, Like }) => {
+    Answer.belongsTo(User);
+    Answer.belongsTo(Question);
+    Answer.hasMany(Comment);
+    Answer.hasMany(Like);
   };
 
   return Answer;

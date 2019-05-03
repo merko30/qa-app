@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import RegisterForm from "../components/forms/RegisterForm";
-import Error from "../components/ui/Error";
-
 import { register } from "../actions/auth";
-import FormWrapper from "../components/layout/FormWrapper";
-import Loading from "../components/ui/Loading";
+
+import RegisterForm from "../components/forms/RegisterForm";
+import FormWrapper from "../layout/FormWrapper";
+import Error from "../components/Error";
+import Loading from "../components/Loading";
 
 class RegisterPage extends Component {
   onSubmit = data => {

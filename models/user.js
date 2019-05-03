@@ -50,6 +50,11 @@ module.exports = (sequelize, type) => {
     }
   );
 
+  User.associate = ({ Question, Answer }) => {
+    User.hasMany(Question, { onDelete: "set null" });
+    User.hasMany(Answer, { onDelete: "set null" });
+  };
+
   User.prototype.validatePassword = function(password) {
     return bcrypt.compareSync(password, this.password);
   };

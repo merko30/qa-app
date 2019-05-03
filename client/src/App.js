@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import { Container } from "react-bootstrap";
 
 import Routes from "./routes";
-import Header from "./components/layout/Header";
+import Header from "./layout/Header";
 
 function App() {
   return (

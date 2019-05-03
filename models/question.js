@@ -16,5 +16,10 @@ module.exports = (sequelize, type) => {
     }
   });
 
+  Question.associate = ({ User, Answer }) => {
+    Question.belongsTo(User);
+    Question.hasMany(Answer, { onDelete: "set null" });
+  };
+
   return Question;
 };

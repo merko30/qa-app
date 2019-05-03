@@ -1,0 +1,7 @@
+.border-bottom {
+  border-bottom: 1px solid #ededed !important;
+}
+
+.border-bottom:last-of-type {
+  border-bottom: none !important;
+}

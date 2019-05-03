@@ -1,9 +1,21 @@
-const { Question, User, Answer } = require("../config/database");
+const { Question, User, Answer, Like, Comment } = require("../config/database");
+
+const include = [
+  { model: User },
+  {
+    model: Answer,
+    include: [
+      { model: User },
+      { model: Like, include: { model: User } },
+      { model: Comment, include: { model: User } }
+    ]
+  }
+];
 
 const findAll = async (req, res, next) => {
   try {
     const questions = await Question.findAll({
-      include: [{ model: User }, { model: Answer }],
+      include,
       order: [["createdAt", "DESC"]]
     });
     res.json({ questions });
@@ -17,7 +29,7 @@ const findOne = async (req, res, next) => {
   try {
     const question = await Question.findOne({
       where: { id },
-      include: [{ model: User }, { model: Answer, include: { model: User } }]
+      include
     });
     res.json({ question });
   } catch (error) {
@@ -31,7 +43,7 @@ const create = async (req, res, next) => {
     const question = await Question.create({ text, userId: req.user.id });
     const withAssociations = await Question.findOne({
       where: { id: question.id },
-      include: [{ model: User }, { model: Answer }]
+      include
     });
     res.json({ question: withAssociations });
   } catch (error) {
@@ -46,7 +58,7 @@ const update = async (req, res, next) => {
     await Question.update({ text }, { where: { id } });
     const withAssociations = await Question.findOne({
       where: { id },
-      include: [{ model: User }, { model: Answer }]
+      include
     });
     res.json({ question: withAssociations });
   } catch (error) {
