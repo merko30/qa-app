@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 
 import TextField from "../TextField";
+import FileField from "../FileField";
 
 const registerSchema = Yup.object().shape({
   password: Yup.string()
@@ -15,10 +16,15 @@ const registerSchema = Yup.object().shape({
   username: Yup.string()
     .min(8, "Too short")
     .required("Required"),
-  name: Yup.string().required("Required")
+  name: Yup.string().required("Required"),
+  avatar: Yup.object()
+    .shape({
+      file: Yup.mixed().required("Avatar is required field")
+    })
+    .nullable()
 });
 
-export default class RegisterForm extends React.Component {
+export class RegisterForm extends React.Component {
   render() {
     const { onSubmit } = this.props;
     return (
@@ -27,13 +33,14 @@ export default class RegisterForm extends React.Component {
           password: "",
           email: "",
           username: "",
-          name: ""
+          name: "",
+          avatar: {}
         }}
         validationSchema={registerSchema}
         onSubmit={values => {
           onSubmit(values);
         }}
-        render={({ isSubmitting }) => {
+        render={({ isSubmitting, setFieldValue }) => {
           return (
             <Form>
               <Field
@@ -41,6 +48,13 @@ export default class RegisterForm extends React.Component {
                 name="username"
                 placeholder="Your username"
                 component={TextField}
+              />
+
+              <Field
+                name="avatar"
+                component={FileField}
+                data-testid="avatar"
+                className="py-2"
               />
 
               <Field
@@ -74,3 +88,5 @@ export default class RegisterForm extends React.Component {
     );
   }
 }
+
+export default RegisterForm;

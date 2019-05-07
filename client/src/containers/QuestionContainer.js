@@ -11,7 +11,7 @@ import CenterWrapper from "../layout/CenterWrapper";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
 
-class QuestionContainer extends Component {
+export class QuestionContainer extends Component {
   componentDidMount() {
     const { getQuestions } = this.props;
     getQuestions();
@@ -29,6 +29,12 @@ class QuestionContainer extends Component {
     return (
       <div>
         {error && <Error error={error} />}
+
+        {loading && (
+          <CenterWrapper>
+            <Loading />
+          </CenterWrapper>
+        )}
         {questions && (
           <QuestionList
             questions={questions}
@@ -36,11 +42,6 @@ class QuestionContainer extends Component {
             removeQuestion={removeQuestion}
             loggedIn={loggedIn}
           />
-        )}
-        {loading && (
-          <CenterWrapper>
-            <Loading />
-          </CenterWrapper>
         )}
       </div>
     );

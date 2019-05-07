@@ -39,10 +39,10 @@ class Header extends Component {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="ml-auto">
+          <Nav className="ml-auto d-flex align-items-center">
             {!loggedIn && <NavItem to="/login">Login</NavItem>}
             {!loggedIn && <NavItem to="/register">Register</NavItem>}
-
+            {loggedIn && <NavItem to="/profile">Profile</NavItem>}
             {loggedIn && (
               <Button onClick={this.handleShow} variant="info" className="my-1">
                 Add Question

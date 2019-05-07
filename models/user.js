@@ -9,7 +9,17 @@ module.exports = (sequelize, type) => {
         primaryKey: true,
         autoIncrement: true
       },
-      name: type.STRING,
+      name: {
+        type: type.STRING,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [6, 36],
+            msg: "Name must be longer than 6 characters"
+          }
+        }
+      },
+      avatar: { type: type.STRING, allowNull: false },
       username: {
         type: type.STRING,
         allowNull: false,
@@ -35,6 +45,14 @@ module.exports = (sequelize, type) => {
             msg: "Password must be longer than 8 characters"
           }
         }
+      },
+      resetPasswordToken: {
+        allowNull: true,
+        type: type.STRING
+      },
+      resetPasswordExpires: {
+        allowNull: true,
+        type: type.DATE
       }
     },
     {
@@ -45,6 +63,12 @@ module.exports = (sequelize, type) => {
             10
           );
           model.dataValues.password = hashedPassword;
+        },
+        beforeUpdate: async function(model) {
+          const exists = await User.findOne({ where: { email: model.email } });
+          if (exists && exists.id && exists.id !== model.id) {
+            throw new Error("User with that email exists");
+          }
         }
       }
     }

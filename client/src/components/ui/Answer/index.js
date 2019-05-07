@@ -66,7 +66,7 @@ class Answer extends Component {
           />
         </MyModal>
 
-        <div className="w-100 my-2 border rounded pt-2 pb-2 px-4 border-grey">
+        <div className="w-100 my-4 border rounded pt-4 pb-4 px-4 border-grey">
           <div className="d-flex align-items-center">
             <h5 style={{ wordBreak: "break-word" }} className="mb-1">
               {answer.text}
@@ -80,12 +80,14 @@ class Answer extends Component {
             )}
           </div>
           <h6 className="text-weight-bold">{answer.user.name}</h6>
-          <Like
-            loggedIn={loggedIn}
-            onLike={this.onLike}
-            onDislike={this.onDislike}
-            answer={answer}
-          />
+          {loggedIn && (
+            <Like
+              loggedIn={loggedIn}
+              onLike={this.onLike}
+              onDislike={this.onDislike}
+              answer={answer}
+            />
+          )}
           <div className="mb-4">
             <CommentList comments={answer.comments} />
             {showCommentForm ? (
@@ -97,8 +99,9 @@ class Answer extends Component {
             ) : (
               <Button
                 variant="link"
-                className="m-0"
+                className="m-0 px-0"
                 onClick={this.onShowCommentForm}
+                disabled={!loggedIn}
               >
                 Add comment
               </Button>

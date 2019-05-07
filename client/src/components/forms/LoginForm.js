@@ -1,6 +1,7 @@
 import React from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 import TextField from "../TextField";
@@ -14,7 +15,7 @@ const loginSchema = Yup.object().shape({
     .required("Required")
 });
 
-export default class MyForm extends React.Component {
+export class LoginForm extends React.Component {
   render() {
     const { onSubmit } = this.props;
     return (
@@ -47,6 +48,9 @@ export default class MyForm extends React.Component {
               <Button variant="success" type="submit">
                 Sign In
               </Button>
+              <Link to="/forgot" className="ml-2">
+                Forgot the password ?
+              </Link>
             </Form>
           );
         }}
@@ -54,3 +58,5 @@ export default class MyForm extends React.Component {
     );
   }
 }
+
+export default LoginForm;

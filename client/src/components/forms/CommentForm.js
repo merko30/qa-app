@@ -13,29 +13,20 @@ const commentSchema = Yup.object().shape({
 
 class CommentForm extends React.Component {
   onSubmit = async (values, { setSubmitting, resetForm }) => {
-    const { onSubmit, answerId, mode } = this.props;
-    const editMode = mode === "edit";
-    if (editMode) {
-      await onSubmit(answerId, { text: values.comment });
-      setSubmitting(false);
-      resetForm();
-    } else {
-      await onSubmit(answerId, { text: values.comment });
-      setSubmitting(false);
-      resetForm();
-    }
+    const { onSubmit, answerId } = this.props;
+    await onSubmit(answerId, { text: values.comment });
+    setSubmitting(false);
+    resetForm();
   };
 
   render() {
-    const { onSubmit, comment, mode = "add" } = this.props;
-    const editMode = mode === "edit";
     return (
       <Formik
         initialValues={{
-          comment: editMode ? comment.text : ""
+          comment: ""
         }}
         validationSchema={commentSchema}
-        onSubmit={onSubmit}
+        onSubmit={this.onSubmit}
         render={({ isSubmitting }) => {
           return (
             <Form>
@@ -47,7 +38,7 @@ class CommentForm extends React.Component {
               />
 
               <Button variant="success" type="submit" disabled={isSubmitting}>
-                {mode[0] + mode.slice(1)} Comment
+                Add Comment
               </Button>
             </Form>
           );
