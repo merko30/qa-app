@@ -1,10 +1,14 @@
 import React from "react";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import FileField from "../FileField";
+import AvatarField from "../AvatarField";
 import { Button } from "react-bootstrap";
 
+const defaultImage = process.env.PUBLIC_URL + "/assets/img/default.png";
+
 const Avatar = ({ src, onEdit, handleToggle, alt, editable }) => {
+  const imageSrc =
+    src === "" ? defaultImage : process.env.REACT_APP_HOST_UPLOADS + src;
   return (
     <div className="row mx-auto">
       {!editable ? (
@@ -12,7 +16,7 @@ const Avatar = ({ src, onEdit, handleToggle, alt, editable }) => {
           <div>
             <button onClick={handleToggle}>edit</button>
             <img
-              src={`http://localhost:5000/uploads/${src}`}
+              src={imageSrc}
               className="rounded-circle my-2"
               alt={alt}
               style={{ width: "200px", height: "200px" }}
@@ -38,12 +42,8 @@ const Avatar = ({ src, onEdit, handleToggle, alt, editable }) => {
           render={({ isSubmitting, setFieldValue }) => {
             return (
               <Form className="mx-auto">
-                <Field
-                  name="avatar"
-                  component={FileField}
-                  data-testid="avatar"
-                  className="my-2"
-                />
+
+                <AvatarField />
 
                 <Button variant="success" type="submit" className="m-2">
                   Change image

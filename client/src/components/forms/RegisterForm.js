@@ -1,10 +1,14 @@
 import React from "react";
-import { Formik, Form, Field } from "formik";
+import { Form, Field, Formik } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 
 import TextField from "../TextField";
-import FileField from "../FileField";
+import AvatarField from "../AvatarField";
+
+const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
+
+const FILE_SIZE = 1024 * 1024 * 5;
 
 const registerSchema = Yup.object().shape({
   password: Yup.string()
@@ -17,14 +21,26 @@ const registerSchema = Yup.object().shape({
     .min(8, "Too short")
     .required("Required"),
   name: Yup.string().required("Required"),
-  avatar: Yup.object()
-    .shape({
-      file: Yup.mixed().required("Avatar is required field")
-    })
-    .nullable()
+  avatar: Yup.mixed()
+    .test(
+      "fileSize",
+      "File too large",
+      value => value && value.size <= FILE_SIZE
+    )
+    .test(
+      "fileFormat",
+      "Unsupported Format",
+      value => value && SUPPORTED_FORMATS.includes(value.type)
+    )
 });
 
 export class RegisterForm extends React.Component {
+  state = {
+    src: ""
+  };
+
+  setSrc = src => this.setState({ src });
+
   render() {
     const { onSubmit } = this.props;
     return (
@@ -40,7 +56,7 @@ export class RegisterForm extends React.Component {
         onSubmit={values => {
           onSubmit(values);
         }}
-        render={({ isSubmitting, setFieldValue }) => {
+        render={({ errors, setFieldValue }) => {
           return (
             <Form>
               <Field
@@ -50,11 +66,11 @@ export class RegisterForm extends React.Component {
                 component={TextField}
               />
 
-              <Field
-                name="avatar"
-                component={FileField}
-                data-testid="avatar"
-                className="py-2"
+              <AvatarField
+                src={this.state.src}
+                onChange={this.setSrc}
+                errors={errors}
+                setFieldValue={setFieldValue}
               />
 
               <Field

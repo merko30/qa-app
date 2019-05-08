@@ -8,6 +8,7 @@ const QuestionModel = require("../models/question");
 const AnswerModel = require("../models/answer");
 const LikeModel = require("../models/like");
 const CommentModel = require("../models/comment");
+const VerificationTokenModel = require("../models/verificationToken");
 
 const {
   DATABASE_HOST,
@@ -39,13 +40,15 @@ const Question = QuestionModel(sequelize, Sequelize);
 const Answer = AnswerModel(sequelize, Sequelize);
 const Comment = CommentModel(sequelize, Sequelize);
 const Like = LikeModel(sequelize, Sequelize);
+const VerificationToken = VerificationTokenModel(sequelize, Sequelize);
 
 const models = {
   User,
   Question,
   Answer,
   Comment,
-  Like
+  Like,
+  VerificationToken
 };
 
 Object.keys(models).forEach(key => {

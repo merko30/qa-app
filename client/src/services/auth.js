@@ -73,4 +73,36 @@ export class AuthService {
     });
     return response;
   };
+
+  static verifyEmailRequest = async (token, email) => {
+    const response = await request(
+      `/api/auth/verification?token=${token}&email=${email}`,
+      "POST",
+      {},
+      {}
+    );
+    return response;
+  };
+
+  static verifyEmailChangeRequest = async (token, email) => {
+    const response = await request(
+      `/api/auth/verifyEmail?token=${token}&email=${email}`,
+      "PUT",
+      {},
+      {}
+    );
+    return response;
+  };
+
+  static changeEmailRequest = async data => {
+    const response = await request(
+      `/api/auth/email`,
+      "POST",
+      {
+        Authorization: token()
+      },
+      data
+    );
+    return response;
+  };
 }

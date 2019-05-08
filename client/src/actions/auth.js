@@ -15,6 +15,9 @@ const getUserAction = createAction("GET_USER");
 const sendResetAction = createAction("SEND_RESET_LINK");
 const resetPasswordAction = createAction("RESET_PASSWORD");
 const editAction = createAction("EDIT_USER");
+const verifyAction = createAction("VERIFY_EMAIL");
+const verifyChangeAction = createAction("VERIFY_EMAIL_CHANGE");
+const changeEmailAction = createAction("CHANGE_EMAIL");
 
 export const register = data => async dispatch => {
   dispatch(registerAction.start());
@@ -44,6 +47,7 @@ export const login = data => async dispatch => {
       const { token, user } = jsonResponse;
       dispatch(loginAction.success());
       dispatch(clearError());
+      dispatch(clearMessage());
       localStorage.setItem("token", token);
       localStorage.setItem("userId", parseInt(user.id));
       history.push("/");
@@ -117,6 +121,56 @@ export const changeAvatar = data => async dispatch => {
     }
   } catch (error) {
     dispatch(editAction.failure(error));
+  }
+};
+
+export const verifyEmail = (token, email) => async dispatch => {
+  dispatch(verifyAction.start());
+  try {
+    const response = await AuthService.verifyEmailRequest(token, email);
+    const jsonResponse = await response.json();
+    if (response.ok) {
+      dispatch(verifyAction.success(jsonResponse.message));
+      dispatch(clearError());
+      history.push("/login");
+    } else {
+      dispatch(verifyAction.failure(jsonResponse));
+    }
+  } catch (error) {
+    dispatch(verifyAction.failure(error));
+  }
+};
+
+export const changeEmail = email => async dispatch => {
+  dispatch(changeEmailAction.start());
+  try {
+    const response = await AuthService.changeEmailRequest(email);
+    const jsonResponse = await response.json();
+    if (response.ok) {
+      dispatch(changeEmailAction.success(jsonResponse.message));
+      dispatch(clearError());
+    } else {
+      dispatch(changeEmailAction.failure(jsonResponse));
+    }
+  } catch (error) {
+    dispatch(verifyChangeAction.failure(error));
+  }
+};
+
+export const verifyEmailChange = (token, email) => async dispatch => {
+  dispatch(verifyChangeAction.start());
+  try {
+    const response = await AuthService.verifyEmailChangeRequest(token, email);
+    const jsonResponse = await response.json();
+    if (response.ok) {
+      dispatch(verifyChangeAction.success(jsonResponse));
+      dispatch(clearError());
+      history.push("/profile");
+    } else {
+      dispatch(verifyChangeAction.failure(jsonResponse));
+    }
+  } catch (error) {
+    dispatch(verifyChangeAction.failure(error));
   }
 };
 

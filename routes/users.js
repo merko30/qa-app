@@ -8,8 +8,13 @@ const {
   forgotPassword,
   reset,
   editUser,
-  changeAvatar
+  changeAvatar,
+  changeEmail
 } = require("../controllers/users");
+const {
+  verifyChangeEmail,
+  verifyEmail
+} = require("../controllers/verification");
 const upload = require("../config/multer");
 
 const router = express.Router();
@@ -25,13 +30,20 @@ router.post("/login", login);
 
 router.get(
   "/user/:id",
-  [passport.authenticate("jwt", { session: false })],
+  passport.authenticate("jwt", { session: false }),
   getUser
 );
 
 router.put("/edit", passport.authenticate("jwt", { session: false }), editUser);
+router.post(
+  "/email",
+  passport.authenticate("jwt", { session: false }),
+  changeEmail
+);
+router.put("/verifyEmail", verifyChangeEmail);
 
 router.post("/forgot", forgotPassword);
 router.post("/reset/:token", reset);
+router.post("/verification", verifyEmail);
 
 module.exports = router;

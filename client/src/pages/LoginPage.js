@@ -16,11 +16,12 @@ class LoginPage extends Component {
   };
 
   render() {
-    const { error, loading } = this.props;
+    const { error, loading, message } = this.props;
     return (
       <FormWrapper>
         <h4 className="text-warning text-weight-bold">Sign In</h4>
         {error && <Error error={error} />}
+        {message && <p>{message}</p>}
         {loading && <Loading />}
         <LoginForm onSubmit={this.onSubmit} />
       </FormWrapper>
@@ -29,9 +30,10 @@ class LoginPage extends Component {
 }
 
 export default connect(
-  ({ auth: { loading, error } }) => ({
+  ({ auth: { loading, error, message } }) => ({
     loading,
-    error
+    error,
+    message
   }),
   { login }
 )(LoginPage);

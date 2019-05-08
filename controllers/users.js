@@ -1,17 +1,23 @@
 const jwt = require("jsonwebtoken");
 const async = require("async");
 const crypto = require("crypto");
-const nodemailer = require("nodemailer");
-const Op = require("sequelize").Op;
 const bcrypt = require("bcrypt");
-const transport = require("../config/emailTransport");
+// const Op = require("sequelize").Op;
 
-const { Question, User, Answer } = require("../config/database");
+const {
+  Question,
+  User,
+  Answer,
+  VerificationToken
+} = require("../config/database");
+
+const transport = require("../config/emailTransport");
+const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
 const include = [{ model: Answer }, { model: Question }];
 
 const getUser = async (req, res, next) => {
-  const { id } = req.params;
+  const { id } = req.user;
   try {
     const user = await User.findOne({
       where: { id },
@@ -25,24 +31,32 @@ const getUser = async (req, res, next) => {
 };
 
 const register = async (req, res, next) => {
-  const { username, name, email, password } = req.body;
-  try {
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      const user = await User.create({
-        name,
-        username,
-        email,
-        password,
-        avatar: req.file.filename
-      });
-      res.json({ user });
-    } else {
-      throw new Error("User exists");
-    }
-  } catch (error) {
-    next(error);
-  }
+  return User.findOrCreate({
+    where: { email: req.body.email },
+    defaults: req.body
+  })
+    .spread(async (user, created) => {
+      if (!created) {
+        throw new Error("User exists");
+      } else {
+        user.avatar = req.file.filename;
+        await user.save();
+        VerificationToken.create({
+          userId: user.id,
+          token: crypto.randomBytes(20).toString("hex")
+        }).then(result => {
+          sendVerificationEmail(user.email, result.token, "new");
+          res.json({
+            message: `${
+              user.email
+            } account created successfully. Verify your email!`
+          });
+        });
+      }
+    })
+    .catch(error => {
+      next(error);
+    });
 };
 
 const login = async (req, res, next) => {
@@ -54,8 +68,14 @@ const login = async (req, res, next) => {
     } else {
       const validPassword = user.validatePassword(password);
       if (validPassword) {
-        const token = jwt.sign({ id: user.id }, "secret", { expiresIn: "7d" });
-        res.json({ token, user });
+        if (user.isVerified) {
+          const token = jwt.sign({ id: user.id }, "secret", {
+            expiresIn: "7d"
+          });
+          res.json({ token, user });
+        } else {
+          throw new Error("Account is not verified!");
+        }
       } else {
         throw new Error("Wrong password");
       }
@@ -80,33 +100,23 @@ const forgotPassword = async (req, res, next) => {
           where: {
             email
           }
-        }).then(user => {
-          if (!user) {
-            throw new Error("User with that email does not exist");
-          }
-          user.resetPasswordToken = token;
-          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-          user.save().then((r, err) => {
-            done(err, token, user);
+        })
+          .then(user => {
+            if (!user) {
+              throw new Error("User with that email does not exist");
+            }
+            user.resetPasswordToken = token;
+            user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+            user.save().then((r, err) => {
+              done(err, token, user);
+            });
+          })
+          .catch(error => {
+            next(error);
           });
-        });
       },
       function(token, user, done) {
-        var mailOptions = {
-          to: user.email,
-          from: "app@fake.com",
-          subject: "Password Reset",
-          text:
-            "You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n" +
-            "Please click on the following link, or paste this into your browser to complete the process:\n\n" +
-            "http://localhost:3000/reset/" +
-            token +
-            "\n\n" +
-            "If you did not request this, please ignore this email and your password will remain unchanged.\n"
-        };
-        transport.sendMail(mailOptions, function(err) {
-          done(err);
-        });
+        sendPasswordResetEmail(user.email, token, done);
       }
     ],
     function(err) {
@@ -195,6 +205,27 @@ const changeAvatar = async (req, res, next) => {
   }
 };
 
+const changeEmail = async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const user = await User.findOne({
+      where: { email }
+    });
+    if (user) {
+      throw new Error("Email already in use");
+    } else {
+      const resetEmailToken = crypto.randomBytes(20).toString("hex");
+      await User.update({ resetEmailToken }, { where: { id: req.user.id } });
+      sendVerificationEmail(email, resetEmailToken, "change");
+      res.json({
+        message: `Verification email has been sent to ${email}`
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -202,5 +233,6 @@ module.exports = {
   forgotPassword,
   reset,
   editUser,
-  changeAvatar
+  changeAvatar,
+  changeEmail
 };

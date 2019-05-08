@@ -12,7 +12,8 @@ import {
   NotFound,
   ProfilePage,
   ForgotPasswordPage,
-  ResetPasswordPage
+  ResetPasswordPage,
+  VerificationPage
 } from "../pages";
 
 export default class Routes extends Component {
@@ -25,7 +26,8 @@ export default class Routes extends Component {
           <GuestRoute path="/login" component={LoginPage} />
           <GuestRoute path="/register" component={RegisterPage} />
           <GuestRoute path="/forgot" component={ForgotPasswordPage} />
-          <GuestRoute path="/reset/:token" component={ResetPasswordPage} />
+          <Route path="/reset/:token" component={ResetPasswordPage} />
+          <Route path="/verification" component={VerificationPage} />
           <PrivateRoute path="/profile" component={ProfilePage} />
           <GuestRoute path="*" component={NotFound} />
         </Switch>

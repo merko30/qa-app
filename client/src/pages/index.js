@@ -6,6 +6,7 @@ import NotFound from "./NotFound";
 import ProfilePage from "./ProfilePage";
 import ForgotPasswordPage from "./ForgotPasswordPage";
 import ResetPasswordPage from "./ResetPasswordPage";
+import VerificationPage from "./VerificationPage";
 
 export {
   HomePage,
@@ -15,5 +16,6 @@ export {
   NotFound,
   ProfilePage,
   ForgotPasswordPage,
-  ResetPasswordPage
+  ResetPasswordPage,
+  VerificationPage
 };

@@ -20,7 +20,16 @@ import {
   CLEAR_MESSAGE,
   EDIT_USER,
   EDIT_USER_FAILURE,
-  EDIT_USER_SUCCESS
+  EDIT_USER_SUCCESS,
+  VERIFY_EMAIL,
+  VERIFY_EMAIL_FAILURE,
+  VERIFY_EMAIL_SUCCESS,
+  VERIFY_EMAIL_CHANGE,
+  VERIFY_EMAIL_CHANGE_FAILURE,
+  VERIFY_EMAIL_CHANGE_SUCCESS,
+  CHANGE_EMAIL,
+  CHANGE_EMAIL_SUCCESS,
+  CHANGE_EMAIL_FAILURE
 } from "../constants/auth";
 
 const initialState = {
@@ -39,6 +48,9 @@ export default function(state = initialState, action) {
     case SEND_RESET_LINK:
     case RESET_PASSWORD:
     case EDIT_USER:
+    case VERIFY_EMAIL:
+    case VERIFY_EMAIL_CHANGE:
+    case CHANGE_EMAIL:
       return {
         ...state,
         loading: true
@@ -54,6 +66,9 @@ export default function(state = initialState, action) {
     case SEND_RESET_LINK_FAILURE:
     case RESET_PASSWORD_FAILURE:
     case EDIT_USER_FAILURE:
+    case VERIFY_EMAIL_FAILURE:
+    case VERIFY_EMAIL_CHANGE_FAILURE:
+    case CHANGE_EMAIL_FAILURE:
       return {
         ...state,
         loading: false,
@@ -74,9 +89,18 @@ export default function(state = initialState, action) {
       };
     case SEND_RESET_LINK_SUCCESS:
     case RESET_PASSWORD_SUCCESS:
+    case VERIFY_EMAIL_SUCCESS:
+    case CHANGE_EMAIL_SUCCESS:
       return {
         ...state,
         message: action.payload,
+        loading: false
+      };
+    case VERIFY_EMAIL_CHANGE_SUCCESS:
+      return {
+        ...state,
+        message: action.payload.message,
+        user: action.payload.user,
         loading: false
       };
     case LOGOUT:

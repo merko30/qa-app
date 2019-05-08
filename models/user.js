@@ -19,7 +19,10 @@ module.exports = (sequelize, type) => {
           }
         }
       },
-      avatar: { type: type.STRING, allowNull: false },
+      avatar: {
+        type: type.STRING,
+        allowNull: true
+      },
       username: {
         type: type.STRING,
         allowNull: false,
@@ -53,7 +56,16 @@ module.exports = (sequelize, type) => {
       resetPasswordExpires: {
         allowNull: true,
         type: type.DATE
-      }
+      },
+      resetEmailToken: {
+        allowNull: true,
+        type: type.STRING
+      },
+      resetEmailExpires: {
+        allowNull: true,
+        type: type.DATE
+      },
+      isVerified: type.BOOLEAN
     },
     {
       hooks: {
@@ -74,9 +86,10 @@ module.exports = (sequelize, type) => {
     }
   );
 
-  User.associate = ({ Question, Answer }) => {
+  User.associate = ({ Question, Answer, User, VerificationToken }) => {
     User.hasMany(Question, { onDelete: "set null" });
     User.hasMany(Answer, { onDelete: "set null" });
+    User.hasOne(VerificationToken);
   };
 
   User.prototype.validatePassword = function(password) {

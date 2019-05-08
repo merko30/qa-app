@@ -10,6 +10,11 @@ class ForgotPasswordForm extends Component {
     return (
       <Formik
         initialValues={{ email: "" }}
+        validationSchema={{
+          email: Yup.string()
+              .email("Invalid email")
+              .required("Required")
+        }}
         onSubmit={values => {
           onSubmit(values.email);
         }}
