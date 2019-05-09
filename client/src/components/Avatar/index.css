@@ -1,0 +1,9 @@
+.penIcon {
+  position: absolute;
+  right: -10px;
+  top: 0;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 8px;
+  background: lightskyblue;
+}

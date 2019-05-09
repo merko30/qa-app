@@ -1,0 +1,16 @@
+.button {
+  border: none;
+  border-radius: 6px;
+  color: white;
+}
+
+.close-button-icon {
+  margin-left: auto !important;
+  background: crimson !important;
+  margin-right: 2px !important;
+}
+
+.apply {
+  background: lightgreen;
+  margin-right: 2px;
+}

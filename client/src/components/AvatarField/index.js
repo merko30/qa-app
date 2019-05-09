@@ -1,12 +1,26 @@
 import React, { Component } from "react";
 import AvatarImageCr from "react-avatar-image-cropper";
 
+import "./index.css";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+
 const imgStyles = {
   width: "250px",
   height: "250px",
   margin: "1em",
   border: "1px solid black"
 };
+
+const actions = [
+  <button key={0} className="button close-button-icon" type="button">
+    <FontAwesomeIcon icon={faWindowClose} />
+  </button>,
+  <button key={1} type="button" className="button apply">
+    <FontAwesomeIcon icon={faCheck} />
+  </button>
+];
 
 class AvatarField extends Component {
   apply = (file, func) => {
@@ -17,16 +31,15 @@ class AvatarField extends Component {
     };
     reader.readAsDataURL(file);
     const imgFile = new File([file], file.name, { type: file.type });
-    func("avatar", imgFile);
+    this.props.setFieldValue("avatar", imgFile);
   };
 
   render() {
-    const { setFieldValue, errors, src } = this.props;
-    console.log(this.props);
+    const { errors, src } = this.props;
     return (
       <div className="d-flex">
         <div style={imgStyles}>
-          <AvatarImageCr apply={file => this.apply(file, setFieldValue)} />
+          <AvatarImageCr apply={this.apply} actions={actions} />
           {errors["avatar"] && (
             <small className="text-danger text-uppercase text-weight-bold">
               {errors["avatar"]}
