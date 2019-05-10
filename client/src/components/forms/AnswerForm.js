@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
@@ -12,6 +13,21 @@ const answerSchema = Yup.object().shape({
 });
 
 class AnswerForm extends React.Component {
+  static propTypes = {
+    handleClose: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    mode: PropTypes.string,
+    questionId: PropTypes.number.isRequired,
+    answer: PropTypes.shape({
+      text: PropTypes.string.isRequired,
+      id: PropTypes.number.isRequired
+    }).isRequired
+  };
+
+  static defaultProps = {
+    mode: "add"
+  };
+
   submit = async (values, { resetForm }) => {
     const { handleClose, onSubmit, mode, questionId, answer } = this.props;
     if (mode === "edit") {

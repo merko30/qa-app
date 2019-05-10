@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Icon({ icon, onClick }) {
@@ -13,3 +14,12 @@ export default function Icon({ icon, onClick }) {
     </span>
   );
 }
+
+Icon.propTypes = {
+  icon: PropTypes.any.isRequired,
+  onClick: PropTypes.func
+};
+
+Icon.defaultProps = {
+  onClick: () => {}
+};

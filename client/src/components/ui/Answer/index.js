@@ -1,17 +1,37 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { faPen, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+import { Button } from "react-bootstrap";
+
+import "./answer.css";
+
 import AnswerForm from "../../forms/AnswerForm";
 import CommentForm from "../../forms/CommentForm";
 import MyModal from "../../../layout/Modal";
-
-import { faPen, faWindowClose } from "@fortawesome/free-solid-svg-icons";
-
-import "./answer.css";
 import Icon from "../../Icon";
 import CommentList from "../CommentList";
 import Like from "./Like";
-import { Button } from "react-bootstrap";
 
 class Answer extends Component {
+  static propTypes = {
+    answer: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      text: PropTypes.string.isRequired,
+      comments: PropTypes.array.isRequired,
+      user: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired,
+    onSubmit: PropTypes.func.isRequired,
+    questionId: PropTypes.number.isRequired,
+    loggedIn: PropTypes.bool.isRequired,
+    addComment: PropTypes.func.isRequired,
+    dislike: PropTypes.func.isRequired,
+    like: PropTypes.func.isRequired,
+    removeAnswer: PropTypes.func.isRequired
+  };
+
   state = {
     show: false,
     showCommentForm: false

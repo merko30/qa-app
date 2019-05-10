@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { Button } from "react-bootstrap";
@@ -16,6 +17,18 @@ const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 const FILE_SIZE = 1024 * 1024 * 5;
 
 class Avatar extends React.Component {
+  static propTypes = {
+    src: PropTypes.string.isRequired,
+    handleToggle: PropTypes.func.isRequired,
+    alt: PropTypes.string,
+    editable: PropTypes.bool.isRequired,
+    onEdit: PropTypes.func.isRequired
+  };
+
+  static defaultProps = {
+    alt: "profile-image"
+  };
+
   state = {
     src: ""
   };

@@ -14,3 +14,10 @@
   background: lightgreen;
   margin-right: 2px;
 }
+
+.image {
+  width: 250px;
+  height: 250px;
+  margin: 1em;
+  border: 1px solid black;
+}

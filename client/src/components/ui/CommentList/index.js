@@ -1,5 +1,6 @@
 import React from "react";
 import Comment from "../Comment";
+import PropTypes from "prop-types";
 
 import "./CommentList.css";
 
@@ -12,5 +13,9 @@ function CommentList({ comments }) {
     </div>
   );
 }
+
+CommentList.propTypes = {
+  comments: PropTypes.array
+};
 
 export default CommentList;

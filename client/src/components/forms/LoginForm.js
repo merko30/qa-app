@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Link } from "react-router-dom";
@@ -16,6 +17,10 @@ const loginSchema = Yup.object().shape({
 });
 
 export class LoginForm extends React.Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired
+  };
+
   render() {
     const { onSubmit } = this.props;
     return (

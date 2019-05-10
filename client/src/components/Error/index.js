@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
 
 export default function Error({ error }) {
@@ -8,3 +9,7 @@ export default function Error({ error }) {
     </Alert>
   );
 }
+
+Error.propTypes = {
+  error: PropTypes.string.isRequired
+};

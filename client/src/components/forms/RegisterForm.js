@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Form, Field, Formik } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
@@ -35,6 +36,10 @@ const registerSchema = Yup.object().shape({
 });
 
 export class RegisterForm extends React.Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired
+  };
+
   state = {
     src: ""
   };

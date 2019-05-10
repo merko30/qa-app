@@ -1,9 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Button } from "react-bootstrap";
-import TextField from "../TextField";
 import { Field, Formik, Form } from "formik";
-
 import * as Yup from "yup";
+
+import TextField from "../TextField";
 
 const schema = Yup.object().shape({
   password: Yup.string()
@@ -52,3 +53,9 @@ export default function RemoveAccount({ handleToggle, editable, onSubmit }) {
     </div>
   );
 }
+
+RemoveAccount.propTypes = {
+  handleToggle: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  editable: PropTypes.bool.isRequired
+};

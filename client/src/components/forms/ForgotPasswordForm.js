@@ -1,10 +1,15 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import TextField from "../TextField";
 import { Button } from "react-bootstrap";
 
 class ForgotPasswordForm extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired
+  };
+
   render() {
     const { onSubmit } = this.props;
     return (
@@ -12,8 +17,8 @@ class ForgotPasswordForm extends Component {
         initialValues={{ email: "" }}
         validationSchema={{
           email: Yup.string()
-              .email("Invalid email")
-              .required("Required")
+            .email("Invalid email")
+            .required("Required")
         }}
         onSubmit={values => {
           onSubmit(values.email);

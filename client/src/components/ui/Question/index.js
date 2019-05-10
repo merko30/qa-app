@@ -1,8 +1,9 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { distanceInWordsToNow } from "date-fns";
-
 import { faPen, faWindowClose } from "@fortawesome/free-solid-svg-icons";
+
 import "./question.css";
 
 import QuestionForm from "../../forms/QuestionForm";
@@ -11,6 +12,20 @@ import Icon from "../../Icon";
 import AnswerCount from "./AnswerCount";
 
 class Question extends Component {
+  static propTypes = {
+    question: PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      text: PropTypes.string.isRequired,
+      user: PropTypes.shape({
+        name: PropTypes.string.isRequired
+      }).isRequired,
+      answers: PropTypes.array.isRequired,
+      userId: PropTypes.number.isRequired
+    }),
+    editQuestion: PropTypes.func.isRequired,
+    loggedIn: PropTypes.bool.isRequired
+  };
+
   state = {
     show: false
   };

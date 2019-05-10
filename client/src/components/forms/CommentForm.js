@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
@@ -12,6 +13,11 @@ const commentSchema = Yup.object().shape({
 });
 
 class CommentForm extends React.Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+    answerId: PropTypes.number.isRequired
+  };
+
   onSubmit = async (values, { setSubmitting, resetForm }) => {
     const { onSubmit, answerId } = this.props;
     await onSubmit(answerId, { text: values.comment });

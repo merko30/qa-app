@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
 import { Button } from "react-bootstrap";
@@ -15,6 +16,13 @@ const schema = Yup.object().shape({
 });
 
 class UserInfo extends Component {
+  static propTypes = {
+    editable: PropTypes.bool.isRequired,
+    data: PropTypes.object.isRequired,
+    onEdit: PropTypes.func.isRequired,
+    handleToggle: PropTypes.func.isRequired
+  };
+
   render() {
     const initialValues = Object.entries(this.props.data).map(item => {
       return [[item[0]], item[1]];

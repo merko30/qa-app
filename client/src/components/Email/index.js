@@ -1,10 +1,18 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import TextField from "../TextField";
 import { Button } from "react-bootstrap";
 
 class Email extends Component {
+  static propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+    editable: PropTypes.bool.isRequired,
+    email: PropTypes.string.isRequired,
+    handleToggle: PropTypes.func.isRequired
+  };
+
   render() {
     const { onSubmit, editable, email, handleToggle } = this.props;
     if (editable) {
@@ -22,7 +30,11 @@ class Email extends Component {
           }}
         >
           <Form>
-            <Field name="email" placeholder="Type new email" component={TextField} />
+            <Field
+              name="email"
+              placeholder="Type new email"
+              component={TextField}
+            />
             <Button variant="light" type="submit">
               Change email
             </Button>

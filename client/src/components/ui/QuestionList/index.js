@@ -1,8 +1,16 @@
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 import Question from "../Question";
 
-export default class QuestionList extends PureComponent {
+export default class QuestionList extends Component {
+  static propTypes = {
+    questions: PropTypes.array.isRequired,
+    editQuestion: PropTypes.func.isRequired,
+    removeQuestion: PropTypes.func.isRequired,
+    loggedIn: PropTypes.bool.isRequired
+  };
+
   render() {
     const { questions, editQuestion, removeQuestion, loggedIn } = this.props;
     return (

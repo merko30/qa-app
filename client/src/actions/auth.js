@@ -175,10 +175,10 @@ export const verifyEmailChange = (token, email) => async dispatch => {
   }
 };
 
-export const deleteUser = (token, email) => async dispatch => {
+export const deleteUser = (data) => async dispatch => {
   dispatch(deleteUserAction.start());
   try {
-    const response = await AuthService.deleteUserRequest(token, email);
+    const response = await AuthService.deleteUserRequest(data);
     const jsonResponse = await response.json();
     if (response.ok) {
       dispatch(deleteUserAction.success(jsonResponse));

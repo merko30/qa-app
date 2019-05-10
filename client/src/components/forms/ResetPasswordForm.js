@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import TextField from "../TextField";
@@ -14,6 +15,11 @@ const schema = Yup.object().shape({
 });
 
 class ResetPasswordForm extends Component {
+  static propTypes = {
+    token: PropTypes.string.isRequired,
+    onSubmit: PropTypes.func.isRequired
+  };
+
   render() {
     const { onSubmit, token } = this.props;
     return (
