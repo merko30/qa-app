@@ -87,8 +87,8 @@ module.exports = (sequelize, type) => {
   );
 
   User.associate = ({ Question, Answer, User, VerificationToken }) => {
-    User.hasMany(Question, { onDelete: "set null" });
-    User.hasMany(Answer, { onDelete: "set null" });
+    User.hasMany(Question, { onDelete: "CASCADE" });
+    User.hasMany(Answer, { onDelete: "CASCADE" });
     User.hasOne(VerificationToken);
   };
 

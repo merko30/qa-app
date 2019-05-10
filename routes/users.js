@@ -9,7 +9,8 @@ const {
   reset,
   editUser,
   changeAvatar,
-  changeEmail
+  changeEmail,
+  deleteUser
 } = require("../controllers/users");
 const {
   verifyChangeEmail,
@@ -45,5 +46,11 @@ router.put("/verifyEmail", verifyChangeEmail);
 router.post("/forgot", forgotPassword);
 router.post("/reset/:token", reset);
 router.post("/verification", verifyEmail);
+
+router.delete(
+  "/deleteUser",
+  passport.authenticate("jwt", { session: false }),
+  deleteUser
+);
 
 module.exports = router;

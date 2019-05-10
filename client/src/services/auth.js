@@ -105,4 +105,14 @@ export class AuthService {
     );
     return response;
   };
+
+  static deleteUserRequest = async data => {
+    const response = await request(
+      `/api/auth/deleteUser`,
+      "DELETE",
+      { Authorization: token() },
+      data
+    );
+    return response;
+  };
 }

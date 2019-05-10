@@ -226,6 +226,23 @@ const changeEmail = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  const { password } = req.body;
+  try {
+    const user = await User.findOne({
+      where: { id: req.user.id }
+    });
+    if (user.validatePassword(password)) {
+      await user.destroy();
+      res.json({ message: "User deleted" });
+    } else {
+      throw new Error("Wrong password");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -234,5 +251,6 @@ module.exports = {
   reset,
   editUser,
   changeAvatar,
-  changeEmail
+  changeEmail,
+  deleteUser
 };

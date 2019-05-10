@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import ForgotPasswordForm from "../components/forms/ForgotPasswordForm";
+import RemoveAccount from "../components/RemoveAccount";
 import Email from "../components/Email";
 import Message from "../components/Message";
 import UserInfo from "../components/UserInfo";
@@ -14,18 +15,24 @@ import {
   sendResetLink,
   editUser,
   changeAvatar,
-  changeEmail
+  changeEmail,
+  deleteUser
 } from "../actions/auth";
 
 class ProfilePage extends Component {
   state = {
     editable: false,
     avatarEditable: false,
-    emailEditable: false
+    emailEditable: false,
+    deleteEditable: false
   };
 
   handleToggle = () => {
     this.setState({ editable: !this.state.editable });
+  };
+
+  handleDeleteEditable = () => {
+    this.setState({ deleteEditable: !this.state.deleteEditable });
   };
 
   handleAvatar = () => {
@@ -51,9 +58,15 @@ class ProfilePage extends Component {
       editUser,
       changeAvatar,
       changeEmail,
-      message
+      message,
+      deleteUser
     } = this.props;
-    const { editable, avatarEditable, emailEditable } = this.state;
+    const {
+      editable,
+      avatarEditable,
+      emailEditable,
+      deleteEditable
+    } = this.state;
     return (
       <div className="row mt-5">
         {loading && (
@@ -110,6 +123,11 @@ class ProfilePage extends Component {
                   );
                 })}
               </ul>
+              <RemoveAccount
+                onSubmit={deleteUser}
+                editable={deleteEditable}
+                handleToggle={this.handleDeleteEditable}
+              />
             </div>
           </div>
         )}
@@ -125,5 +143,5 @@ export default connect(
     error,
     message
   }),
-  { getUser, sendResetLink, editUser, changeAvatar, changeEmail }
+  { getUser, sendResetLink, editUser, changeAvatar, changeEmail, deleteUser }
 )(ProfilePage);

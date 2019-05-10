@@ -18,6 +18,7 @@ const editAction = createAction("EDIT_USER");
 const verifyAction = createAction("VERIFY_EMAIL");
 const verifyChangeAction = createAction("VERIFY_EMAIL_CHANGE");
 const changeEmailAction = createAction("CHANGE_EMAIL");
+const deleteUserAction = createAction("DELETE_USER");
 
 export const register = data => async dispatch => {
   dispatch(registerAction.start());
@@ -171,6 +172,24 @@ export const verifyEmailChange = (token, email) => async dispatch => {
     }
   } catch (error) {
     dispatch(verifyChangeAction.failure(error));
+  }
+};
+
+export const deleteUser = (token, email) => async dispatch => {
+  dispatch(deleteUserAction.start());
+  try {
+    const response = await AuthService.deleteUserRequest(token, email);
+    const jsonResponse = await response.json();
+    if (response.ok) {
+      dispatch(deleteUserAction.success(jsonResponse));
+      dispatch(clearError());
+      localStorage.clear();
+      history.push("/login");
+    } else {
+      dispatch(deleteUserAction.failure(jsonResponse));
+    }
+  } catch (error) {
+    dispatch(deleteUserAction.failure(error));
   }
 };
 
