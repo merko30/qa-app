@@ -18,6 +18,7 @@ const editAction = createAction("EDIT_USER");
 const verifyAction = createAction("VERIFY_EMAIL");
 const verifyChangeAction = createAction("VERIFY_EMAIL_CHANGE");
 const changeEmailAction = createAction("CHANGE_EMAIL");
+const changePasswordAction = createAction("CHANGE_PASSWORD");
 const deleteUserAction = createAction("DELETE_USER");
 
 export const register = data => async dispatch => {
@@ -175,7 +176,7 @@ export const verifyEmailChange = (token, email) => async dispatch => {
   }
 };
 
-export const deleteUser = (data) => async dispatch => {
+export const deleteUser = data => async dispatch => {
   dispatch(deleteUserAction.start());
   try {
     const response = await AuthService.deleteUserRequest(data);
@@ -190,6 +191,22 @@ export const deleteUser = (data) => async dispatch => {
     }
   } catch (error) {
     dispatch(deleteUserAction.failure(error));
+  }
+};
+
+export const changePassword = data => async dispatch => {
+  dispatch(changePasswordAction.start());
+  try {
+    const response = await AuthService.changePasswordRequest(data);
+    const jsonResponse = await response.json();
+    if (response.ok) {
+      dispatch(changePasswordAction.success(jsonResponse));
+      dispatch(clearError());
+    } else {
+      dispatch(changePasswordAction.failure(jsonResponse));
+    }
+  } catch (error) {
+    dispatch(verifyChangeAction.failure(error));
   }
 };
 

@@ -43,6 +43,7 @@ export class QuestionContainer extends Component {
             loggedIn={loggedIn}
           />
         )}
+        <div>load more</div>
       </div>
     );
   }

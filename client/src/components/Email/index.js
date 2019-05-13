@@ -44,9 +44,8 @@ class Email extends Component {
     } else {
       return (
         <div>
-          <p className="text-uppercase">email</p>
           <li className="list-group-item">{email}</li>
-          <Button variant="info" className="m-2" onClick={handleToggle}>
+          <Button variant="info" className="my-2" onClick={handleToggle}>
             Update email
           </Button>
         </div>

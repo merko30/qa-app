@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import throttle from "lodash/throttle";
 
 import { distanceInWordsToNow } from "date-fns";
 
-import { getQuestion } from "../actions/questions";
+import { getQuestion, getMoreAnswers } from "../actions/questions";
 import { addAnswer, editAnswer, removeAnswer } from "../actions/answers";
 import { like, dislike } from "../actions/likes";
 import { addComment } from "../actions/comments";
@@ -14,11 +15,30 @@ import Error from "../components/Error";
 import CenterWrapper from "../layout/CenterWrapper";
 import AnswerForm from "../components/forms/AnswerForm";
 
+let PAGE = 1;
+
 export class DetailQuestionContainer extends Component {
+  componentWillMount() {
+    window.addEventListener("scroll", throttle(this.checkForMore, 500));
+  }
+
+  checkForMore = () => {
+    const top = window.scrollY + window.innerHeight;
+    const loadMore = document.getElementById("load");
+    const { getMoreAnswers, id, question, meta } = this.props;
+    const hasMore = question.answers.length !== question.answerCount;
+    if (top > loadMore.offsetTop && hasMore) {
+      getMoreAnswers(id, meta.next);
+    }
+  };
+
   componentDidMount() {
-    const { id } = this.props;
-    const { getQuestion } = this.props;
-    getQuestion(id);
+    const { getQuestion, id } = this.props;
+    getQuestion(id, PAGE);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", throttle(this.checkForMore, 500));
   }
 
   render() {
@@ -32,7 +52,8 @@ export class DetailQuestionContainer extends Component {
       error,
       like,
       dislike,
-      addComment
+      addComment,
+      answersLoading
     } = this.props;
     return (
       <div>
@@ -71,25 +92,32 @@ export class DetailQuestionContainer extends Component {
             />
           </div>
         )}
+        <div id="load">
+          <p>load more</p>
+        </div>
+        {answersLoading && <p>loading...</p>}
       </div>
     );
   }
 }
 
 const mapStateToProps = ({
-  questions: { question, loading, error },
+  questions: { question, loading, error, answersLoading, singleMeta },
   auth: { loggedIn }
 }) => ({
   question,
   loading,
+  answersLoading,
   error,
-  loggedIn
+  loggedIn,
+  meta: singleMeta
 });
 
 export default connect(
   mapStateToProps,
   {
     getQuestion,
+    getMoreAnswers,
     addAnswer,
     editAnswer,
     removeAnswer,

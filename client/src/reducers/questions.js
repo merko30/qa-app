@@ -16,14 +16,19 @@ import {
   EDIT_QUESTION_FAILURE,
   REMOVE_QUESTION_FAILURE,
   REMOVE_QUESTION,
-  REMOVE_QUESTION_SUCCESS
+  REMOVE_QUESTION_SUCCESS,
+  FETCH_MORE,
+  FETCH_MORE_SUCCESS,
+  FETCH_MORE_FAILURE
 } from "../constants/questions";
 
 const initialState = {
   questions: [],
   loading: false,
   error: null,
-  question: null
+  question: null,
+  answersLoading: false,
+  singleMeta: null
 };
 
 export default function(state = initialState, action) {
@@ -37,6 +42,11 @@ export default function(state = initialState, action) {
         ...state,
         loading: true
       };
+    case FETCH_MORE:
+      return {
+        ...state,
+        answersLoading: true
+      };
     case FETCH_QUESTIONS_SUCCESS:
       return {
         ...state,
@@ -47,13 +57,29 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        question: action.payload
+        question: action.payload.question,
+        singleMeta: action.payload.meta
+      };
+    case FETCH_MORE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        question: {
+          ...state.question,
+          answers: [
+            ...state.question.answers,
+            ...action.payload.question.answers
+          ]
+        },
+        singleMeta: action.payload.meta,
+        answersLoading: false
       };
     case FETCH_QUESTIONS_FAILURE:
     case FETCH_QUESTION_FAILURE:
     case ADD_QUESTION_FAILURE:
     case EDIT_QUESTION_FAILURE:
     case REMOVE_QUESTION_FAILURE:
+    case FETCH_MORE_FAILURE:
       return {
         ...state,
         loading: false,

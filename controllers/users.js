@@ -14,7 +14,7 @@ const {
 const transport = require("../config/emailTransport");
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
 
-const include = [{ model: Answer }, { model: Question }];
+const include = [{ model: Answer, offset: 5, limit: 5 }, { model: Question }];
 
 const getUser = async (req, res, next) => {
   const { id } = req.user;
@@ -226,6 +226,32 @@ const changeEmail = async (req, res, next) => {
   }
 };
 
+const changePassword = async (req, res, next) => {
+  const { password, newPassword } = req.body;
+  try {
+    const user = await User.findOne({
+      where: { id: req.user.id }
+    });
+    if (!user) {
+      throw new Error("User not found");
+    } else {
+      if (user.validatePassword(password)) {
+        user.password = await bcrypt.hash(newPassword, 10);
+        await user.save();
+        const toReturn = await User.findOne({
+          where: { id: req.user.id },
+          include
+        });
+        res.json({ message: "Your password has been updated", user: toReturn });
+      } else {
+        throw new Error("Wrong password");
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 const deleteUser = async (req, res, next) => {
   const { password } = req.body;
   try {
@@ -252,5 +278,6 @@ module.exports = {
   editUser,
   changeAvatar,
   changeEmail,
-  deleteUser
+  deleteUser,
+  changePassword
 };

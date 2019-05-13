@@ -10,6 +10,7 @@ import createAction from "../utils/createAction";
 
 const fetchAll = createAction("FETCH_QUESTIONS");
 const fetchOne = createAction("FETCH_QUESTION");
+const fetchMore = createAction("FETCH_MORE");
 const remove = createAction("REMOVE_QUESTION");
 const add = createAction("ADD_QUESTION");
 const edit = createAction("EDIT_QUESTION");
@@ -24,13 +25,23 @@ export const getQuestions = () => async dispatch => {
   }
 };
 
-export const getQuestion = id => async dispatch => {
+export const getQuestion = (id, page) => async dispatch => {
   dispatch(fetchOne.start());
   try {
-    const { question } = await QuestionService.fetchOneRequest(id);
-    dispatch(fetchOne.success(question));
+    const response = await QuestionService.fetchOneRequest(id, page);
+    dispatch(fetchOne.success(response));
   } catch (error) {
     dispatch(fetchOne.failure(error));
+  }
+};
+
+export const getMoreAnswers = (id, page) => async dispatch => {
+  dispatch(fetchMore.start());
+  try {
+    const response = await QuestionService.fetchOneRequest(id, page);
+    dispatch(fetchMore.success(response));
+  } catch (error) {
+    dispatch(fetchMore.failure(error));
   }
 };
 

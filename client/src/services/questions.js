@@ -7,8 +7,12 @@ export class QuestionService {
     return questions;
   };
 
-  static fetchOneRequest = async id => {
-    const question = await (await request(`/api/q/${id}`, "GET", {})).json();
+  static fetchOneRequest = async (id, page = 1) => {
+    const question = await (await request(
+      `/api/q/${id}?page=${page}`,
+      "GET",
+      {}
+    )).json();
     return question;
   };
 

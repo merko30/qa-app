@@ -106,6 +106,18 @@ export class AuthService {
     return response;
   };
 
+  static changePasswordRequest = async data => {
+    const response = await request(
+      `/api/auth/password`,
+      "PUT",
+      {
+        Authorization: token()
+      },
+      data
+    );
+    return response;
+  };
+
   static deleteUserRequest = async data => {
     const response = await request(
       `/api/auth/deleteUser`,

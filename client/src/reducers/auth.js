@@ -32,7 +32,10 @@ import {
   CHANGE_EMAIL_FAILURE,
   DELETE_USER,
   DELETE_USER_SUCCESS,
-  DELETE_USER_FAILURE
+  DELETE_USER_FAILURE,
+  CHANGE_PASSWORD_SUCCESS,
+  CHANGE_PASSWORD_FAILURE,
+  CHANGE_PASSWORD
 } from "../constants/auth";
 
 const initialState = {
@@ -55,6 +58,7 @@ export default function(state = initialState, action) {
     case VERIFY_EMAIL_CHANGE:
     case CHANGE_EMAIL:
     case DELETE_USER:
+    case CHANGE_PASSWORD:
       return {
         ...state,
         loading: true
@@ -74,6 +78,7 @@ export default function(state = initialState, action) {
     case VERIFY_EMAIL_CHANGE_FAILURE:
     case CHANGE_EMAIL_FAILURE:
     case DELETE_USER_FAILURE:
+    case CHANGE_PASSWORD_FAILURE:
       return {
         ...state,
         loading: false,
@@ -109,6 +114,7 @@ export default function(state = initialState, action) {
         loading: false
       };
     case VERIFY_EMAIL_CHANGE_SUCCESS:
+    case CHANGE_PASSWORD_SUCCESS:
       return {
         ...state,
         message: action.payload.message,

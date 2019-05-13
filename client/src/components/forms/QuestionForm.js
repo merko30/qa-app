@@ -19,8 +19,7 @@ export default class QuestionForm extends React.Component {
     question: PropTypes.shape({
       text: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired
-    }),
-    handleClose: PropTypes.func.isRequired
+    })
   };
 
   static defaultProps = {

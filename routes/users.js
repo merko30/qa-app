@@ -10,7 +10,8 @@ const {
   editUser,
   changeAvatar,
   changeEmail,
-  deleteUser
+  deleteUser,
+  changePassword
 } = require("../controllers/users");
 const {
   verifyChangeEmail,
@@ -40,6 +41,11 @@ router.post(
   "/email",
   passport.authenticate("jwt", { session: false }),
   changeEmail
+);
+router.put(
+  "/password",
+  passport.authenticate("jwt", { session: false }),
+  changePassword
 );
 router.put("/verifyEmail", verifyChangeEmail);
 

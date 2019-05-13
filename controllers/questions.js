@@ -1,4 +1,7 @@
+const Sequelize = require("sequelize");
 const { Question, User, Answer, Like, Comment } = require("../config/database");
+
+const perPage = 6;
 
 const include = [
   { model: User },
@@ -6,7 +9,10 @@ const include = [
     model: Answer,
     include: [
       { model: User },
-      { model: Like, include: { model: User } },
+      {
+        model: Like,
+        include: { model: User }
+      },
       { model: Comment, include: { model: User } }
     ]
   }
@@ -26,12 +32,46 @@ const findAll = async (req, res, next) => {
 
 const findOne = async (req, res, next) => {
   const { id } = req.params;
+  let { page = 1 } = req.query;
   try {
     const question = await Question.findOne({
       where: { id },
-      include
+      attributes: [
+        "text",
+        "createdAt",
+        "updatedAt",
+        "id",
+        [
+          Sequelize.literal(
+            `(SELECT COUNT(*) FROM answers WHERE questionId = ${id})`
+          ),
+          "answerCount"
+        ]
+      ],
+      include: [
+        { model: User },
+        {
+          separate: false,
+          model: Answer,
+          attributes: [
+            "id",
+            "text",
+            "createdAt",
+            "updatedAt",
+            [Sequelize.fn("COUNT", Sequelize.col("Like.id")), "likesCount"]
+          ],
+          include: [
+            { model: User },
+            { model: Like, include: { model: User } },
+            { model: Comment, include: { model: User } }
+          ],
+          limit: perPage,
+          offset: perPage * (page - 1)
+        }
+      ]
     });
-    res.json({ question });
+    const nextPage = ++page;
+    res.json({ question, meta: { next: nextPage } });
   } catch (error) {
     next(error);
   }

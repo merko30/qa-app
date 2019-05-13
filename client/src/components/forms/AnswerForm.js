@@ -14,14 +14,13 @@ const answerSchema = Yup.object().shape({
 
 class AnswerForm extends React.Component {
   static propTypes = {
-    handleClose: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     mode: PropTypes.string,
     questionId: PropTypes.number.isRequired,
     answer: PropTypes.shape({
       text: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired
-    }).isRequired
+    })
   };
 
   static defaultProps = {
