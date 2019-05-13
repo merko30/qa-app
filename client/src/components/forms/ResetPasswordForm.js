@@ -7,7 +7,7 @@ import { Button } from "react-bootstrap";
 
 const schema = Yup.object().shape({
   password: Yup.string()
-    .min(8, "too short")
+    .min(8, "Password should be longer than 8 characters")
     .required("Password is required"),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords do not match")

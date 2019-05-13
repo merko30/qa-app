@@ -9,8 +9,8 @@ module.exports = (sequelize, type) => {
       type: type.STRING,
       validate: {
         len: {
-          args: [24, 150],
-          msg: "Question must have at least 24 characters."
+          args: [16, 150],
+          msg: "Question must have at least 16 characters."
         }
       }
     }

@@ -8,7 +8,7 @@ import TextArea from "../TextField";
 
 const commentSchema = Yup.object().shape({
   comment: Yup.string()
-    .min(10, "Too Short!")
+    .min(12, "Your comment should be longer than 12 characters")
     .required("Required")
 });
 

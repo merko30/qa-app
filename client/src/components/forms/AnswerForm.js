@@ -8,7 +8,7 @@ import TextArea from "../TextArea";
 
 const answerSchema = Yup.object().shape({
   answer: Yup.string()
-    .min(24, "Too Short!")
+    .min(12, "Your answer should be longer than 12 characters")
     .required("Required")
 });
 

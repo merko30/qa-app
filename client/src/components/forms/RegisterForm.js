@@ -13,19 +13,21 @@ const FILE_SIZE = 1024 * 1024 * 5;
 
 const registerSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, "Too Short!")
+    .min(8, "Your password should be longer than 8 characters")
     .required("Required"),
   email: Yup.string()
     .email("Invalid email")
     .required("Required"),
   username: Yup.string()
-    .min(8, "Too short")
+    .min(6, "Your username should be longer than 6 characters")
     .required("Required"),
-  name: Yup.string().required("Required"),
+  name: Yup.string()
+    .min(4, "Your name should be longer than 4 characters")
+    .required("Required"),
   avatar: Yup.mixed()
     .test(
       "fileSize",
-      "File too large",
+      "File is too large",
       value => value && value.size <= FILE_SIZE
     )
     .test(

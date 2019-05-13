@@ -9,7 +9,7 @@ import TextField from "../TextField";
 
 const loginSchema = Yup.object().shape({
   password: Yup.string()
-    .min(8, "Too Short!")
+    .min(8, "Password should be longer than 8 characters")
     .required("Required"),
   email: Yup.string()
     .email("Invalid email")
