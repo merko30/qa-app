@@ -10,6 +10,7 @@ import QuestionForm from "../../forms/QuestionForm";
 import MyModal from "../../../layout/Modal";
 import Icon from "../../Icon";
 import AnswerCount from "./AnswerCount";
+import Confirmation from "../../Confirmation";
 
 class Question extends Component {
   static propTypes = {
@@ -27,7 +28,8 @@ class Question extends Component {
   };
 
   state = {
-    show: false
+    show: false,
+    showRemoveConfirmation: false
   };
 
   handleClose = () => {
@@ -36,6 +38,12 @@ class Question extends Component {
 
   handleShow = () => {
     this.setState({ show: true });
+  };
+
+  handleToggleRemove = () => {
+    this.setState({
+      showRemoveConfirmation: !this.state.showRemoveConfirmation
+    });
   };
 
   onRemove = () => {
@@ -58,7 +66,7 @@ class Question extends Component {
     } = this.props;
     const userID = localStorage.getItem("userId");
     const userMatchesAuthor = loggedIn && userID && parseInt(userID) === userId;
-    const { show } = this.state;
+    const { show, showRemoveConfirmation } = this.state;
     return (
       <div className="col-md-8 col-md-offset-2 col-sm-12 col-xs-12 mx-auto my-2">
         <div className="d-flex align-items-center w-100">
@@ -84,7 +92,15 @@ class Question extends Component {
                     handleClose={this.handleClose}
                   />
                 </MyModal>
-                <Icon icon={faWindowClose} onClick={this.onRemove} />
+                <Icon icon={faWindowClose} onClick={this.handleToggleRemove} />
+                <MyModal
+                  show={showRemoveConfirmation}
+                  handleClose={this.handleToggleRemove}
+                >
+                  <Confirmation onClick={this.onRemove}>
+                    <p>Are you sure you want to delete this question ?</p>
+                  </Confirmation>
+                </MyModal>
               </div>
             )}
           </div>

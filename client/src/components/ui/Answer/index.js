@@ -11,6 +11,8 @@ import MyModal from "../../../layout/Modal";
 import Icon from "../../Icon";
 import CommentList from "../CommentList";
 import Like from "./Like";
+import Confirmation from "../../Confirmation";
+import Text from "../../Text";
 
 class Answer extends Component {
   static propTypes = {
@@ -34,7 +36,9 @@ class Answer extends Component {
 
   state = {
     show: false,
-    showCommentForm: false
+    showCommentForm: false,
+    showRemoveConfirmation: false,
+    readMore: false
   };
 
   onShowCommentForm = () => {
@@ -68,8 +72,15 @@ class Answer extends Component {
     dislike(answer.id, likeID);
   };
 
+  handleToggleRemove = () => {
+    console.log("here");
+    this.setState({
+      showRemoveConfirmation: !this.state.showRemoveConfirmation
+    });
+  };
+
   render() {
-    const { show, showCommentForm } = this.state;
+    const { show, showCommentForm, showRemoveConfirmation } = this.state;
     const { answer, onSubmit, questionId, loggedIn, addComment } = this.props;
     const userID = parseInt(localStorage.getItem("userId"));
     const userMatchesAuthor = loggedIn && userID && userID === answer.userId;
@@ -86,16 +97,21 @@ class Answer extends Component {
           />
         </MyModal>
 
-        <div className="w-100 my-4 border rounded pt-4 pb-4 px-4 border-grey">
+        <div className="w-100 mt-2 border rounded pt-4 pb-1 px-4 border-grey">
           <div className="d-flex align-items-center">
-            <h5 style={{ wordBreak: "break-word" }} className="mb-1">
-              {answer.text}
-            </h5>
-
+            <Text>{answer.text}</Text>
             {userMatchesAuthor && (
-              <div className="ml-auto">
+              <div className="ml-auto icons">
                 <Icon icon={faPen} onClick={this.handleShow} />
-                <Icon icon={faWindowClose} onClick={this.onRemove} />
+                <Icon icon={faWindowClose} onClick={this.handleToggleRemove} />
+                <MyModal
+                  show={showRemoveConfirmation}
+                  handleClose={this.handleToggleRemove}
+                >
+                  <Confirmation onClick={this.onRemove}>
+                    <p>Are you sure you want to delete this answer ?</p>
+                  </Confirmation>
+                </MyModal>
               </div>
             )}
           </div>
@@ -108,12 +124,12 @@ class Answer extends Component {
               answer={answer}
             />
           )}
-          <div className="mb-4">
+          <div className="mt-2">
             <CommentList comments={answer.comments} />
             {showCommentForm ? (
               <CommentForm
                 onSubmit={addComment}
-                mode="add"
+                loggedIn={loggedIn}
                 answerId={answer.id}
               />
             ) : (
@@ -121,7 +137,6 @@ class Answer extends Component {
                 variant="link"
                 className="m-0 px-0"
                 onClick={this.onShowCommentForm}
-                disabled={!loggedIn}
               >
                 Add comment
               </Button>

@@ -15,11 +15,11 @@ const remove = createAction("REMOVE_QUESTION");
 const add = createAction("ADD_QUESTION");
 const edit = createAction("EDIT_QUESTION");
 
-export const getQuestions = () => async dispatch => {
+export const getQuestions = (page = 1) => async dispatch => {
   dispatch(fetchAll.start());
   try {
-    const questions = await QuestionService.fetchAll();
-    dispatch(fetchAll.success(questions));
+    const data = await QuestionService.fetchAll(page);
+    dispatch(fetchAll.success(data));
   } catch (error) {
     dispatch(fetchAll.failure(error));
   }
@@ -36,6 +36,7 @@ export const getQuestion = (id, page) => async dispatch => {
 };
 
 export const getMoreAnswers = (id, page) => async dispatch => {
+  console.log("here in action");
   dispatch(fetchMore.start());
   try {
     const response = await QuestionService.fetchOneRequest(id, page);

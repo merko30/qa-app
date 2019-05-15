@@ -19,7 +19,6 @@ class LoginPage extends Component {
     const { error, loading, message } = this.props;
     return (
       <FormWrapper>
-        <h4 className="text-warning text-weight-bold">Sign In</h4>
         {error && <Error error={error} />}
         {message && <p>{message}</p>}
         {loading && <Loading />}

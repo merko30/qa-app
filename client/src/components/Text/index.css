@@ -1,0 +1,9 @@
+.content {
+  width: auto;
+  line-height: 1.1em;
+}
+
+.parent {
+  border: 1px solid red;
+  overflow: hidden;
+}

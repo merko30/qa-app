@@ -18,7 +18,6 @@ class RegisterPage extends Component {
     const { error, loading } = this.props;
     return (
       <FormWrapper>
-        <h4 className="text-warning text-weight-bold">Sign In</h4>
         {error && <Error error={error} />}
         {loading && <Loading />}
         <RegisterForm onSubmit={this.onSubmit} />

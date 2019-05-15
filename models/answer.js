@@ -6,12 +6,9 @@ module.exports = (sequelize, type) => {
       autoIncrement: true
     },
     text: {
-      type: type.STRING,
+      type: type.TEXT,
       validate: {
-        len: {
-          args: [12, 150],
-          msg: "Answer must have at least 12 characters."
-        }
+        min: 12
       }
     }
   });

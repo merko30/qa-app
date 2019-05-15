@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 
 import TextArea from "../TextArea";
+import history from "../../config/history";
 
 const answerSchema = Yup.object().shape({
   answer: Yup.string()
@@ -28,17 +29,28 @@ class AnswerForm extends React.Component {
   };
 
   submit = async (values, { resetForm }) => {
-    const { handleClose, onSubmit, mode, questionId, answer } = this.props;
-    if (mode === "edit") {
-      await onSubmit(questionId, answer.id, { text: values.answer });
-      handleClose();
+    const {
+      handleClose,
+      onSubmit,
+      mode,
+      questionId,
+      answer,
+      loggedIn
+    } = this.props;
+    if (loggedIn) {
+      if (mode === "edit") {
+        await onSubmit(questionId, answer.id, { text: values.answer });
+        handleClose();
+      }
+      await onSubmit(questionId, { text: values.answer });
+      resetForm();
+    } else {
+      history.push("/login");
     }
-    onSubmit(questionId, { text: values.answer });
-    resetForm();
   };
 
   render() {
-    const { answer, mode = "add", loggedIn } = this.props;
+    const { answer, mode = "add" } = this.props;
     return (
       <Formik
         initialValues={{
@@ -50,14 +62,13 @@ class AnswerForm extends React.Component {
           return (
             <Form className="d-block">
               <Field
-                disabled={!loggedIn}
                 type="text"
                 name="answer"
                 placeholder="Answer the question"
                 component={TextArea}
               />
 
-              <Button variant="success" type="submit" disabled={!loggedIn}>
+              <Button variant="success" type="submit">
                 {mode[0] + mode.slice(1)} answer
               </Button>
             </Form>

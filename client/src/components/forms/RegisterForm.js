@@ -23,18 +23,16 @@ const registerSchema = Yup.object().shape({
     .required("Required"),
   name: Yup.string()
     .min(4, "Your name should be longer than 4 characters")
-    .required("Required"),
-  avatar: Yup.mixed()
-    .test(
-      "fileSize",
-      "File is too large",
-      value => value && value.size <= FILE_SIZE
-    )
-    .test(
-      "fileFormat",
-      "Unsupported Format",
-      value => value && SUPPORTED_FORMATS.includes(value.type)
-    )
+    .required("Required")
+  // avatar: Yup.mixed()
+  //   .test("fileSize", "File is too large", value => {
+  //     return value && value.size >= FILE_SIZE;
+  //   })
+  //   .test(
+  //     "fileFormat",
+  //     "Unsupported Format",
+  //     value => value && SUPPORTED_FORMATS.includes(value.type)
+  //   )
 });
 
 export class RegisterForm extends React.Component {
@@ -65,46 +63,50 @@ export class RegisterForm extends React.Component {
         }}
         render={({ errors, setFieldValue }) => {
           return (
-            <Form>
-              <Field
-                type="text"
-                name="username"
-                placeholder="Your username"
-                component={TextField}
-              />
+            <div className="jumbotron">
+              <h1 className="display-6">Sign up today</h1>
+              <hr className="my-3" />
+              <Form>
+                <AvatarField
+                  src={this.state.src}
+                  onChange={this.setSrc}
+                  errors={errors}
+                  setFieldValue={setFieldValue}
+                />
 
-              <AvatarField
-                src={this.state.src}
-                onChange={this.setSrc}
-                errors={errors}
-                setFieldValue={setFieldValue}
-              />
+                <Field
+                  type="text"
+                  name="username"
+                  placeholder="Your username"
+                  component={TextField}
+                />
 
-              <Field
-                type="text"
-                name="name"
-                placeholder="Your name"
-                component={TextField}
-              />
+                <Field
+                  type="text"
+                  name="name"
+                  placeholder="Your name"
+                  component={TextField}
+                />
 
-              <Field
-                type="text"
-                name="email"
-                placeholder="Email Address"
-                component={TextField}
-              />
+                <Field
+                  type="text"
+                  name="email"
+                  placeholder="Email Address"
+                  component={TextField}
+                />
 
-              <Field
-                type="password"
-                name="password"
-                placeholder="Type a password"
-                component={TextField}
-              />
+                <Field
+                  type="password"
+                  name="password"
+                  placeholder="Type a password"
+                  component={TextField}
+                />
 
-              <Button variant="success" type="submit">
-                Sign Up
-              </Button>
-            </Form>
+                <Button variant="success" type="submit">
+                  Sign Up
+                </Button>
+              </Form>
+            </div>
           );
         }}
       />

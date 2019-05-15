@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const { Question, User, Answer, Like, Comment } = require("../config/database");
 
 const perPage = 6;
+const questionsPerPage = 12;
 
 const include = [
   { model: User },
@@ -19,12 +20,20 @@ const include = [
 ];
 
 const findAll = async (req, res, next) => {
+  let { page = 1 } = req.query;
   try {
-    const questions = await Question.findAll({
+    const { rows, count } = await Question.findAndCountAll({
+      distinct: true,
       include,
-      order: [["createdAt", "DESC"]]
+      order: [["createdAt", "DESC"]],
+      limit: questionsPerPage,
+      offset: questionsPerPage * (page - 1)
     });
-    res.json({ questions });
+    const nextPage = ++page;
+    res.json({
+      questions: rows,
+      meta: { next: nextPage, count, perPage: questionsPerPage }
+    });
   } catch (error) {
     next(error);
   }
@@ -51,27 +60,28 @@ const findOne = async (req, res, next) => {
       include: [
         { model: User },
         {
-          separate: false,
           model: Answer,
-          attributes: [
-            "id",
-            "text",
-            "createdAt",
-            "updatedAt",
-            [Sequelize.fn("COUNT", Sequelize.col("Like.id")), "likesCount"]
-          ],
+          attributes: {
+            include: [
+              [
+                Sequelize.fn("COUNT", Sequelize.col("likes.answerId")),
+                "likeCount"
+              ]
+            ]
+          },
           include: [
             { model: User },
-            { model: Like, include: { model: User } },
+            { model: Like, include: { model: User }, attributes: ["id"] },
             { model: Comment, include: { model: User } }
           ],
           limit: perPage,
-          offset: perPage * (page - 1)
+          offset: perPage * (page - 1),
+          group: "answer.id"
         }
       ]
     });
     const nextPage = ++page;
-    res.json({ question, meta: { next: nextPage } });
+    res.json({ question, meta: { next: nextPage, perPage } });
   } catch (error) {
     next(error);
   }

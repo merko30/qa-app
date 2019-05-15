@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 
 import TextArea from "../TextField";
+import history from "../../config/history";
 
 const commentSchema = Yup.object().shape({
   comment: Yup.string()
@@ -15,14 +16,19 @@ const commentSchema = Yup.object().shape({
 class CommentForm extends React.Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
-    answerId: PropTypes.number.isRequired
+    answerId: PropTypes.number.isRequired,
+    loggedIn: PropTypes.bool.isRequired
   };
 
   onSubmit = async (values, { setSubmitting, resetForm }) => {
-    const { onSubmit, answerId } = this.props;
-    await onSubmit(answerId, { text: values.comment });
-    setSubmitting(false);
-    resetForm();
+    const { loggedIn, onSubmit, answerId } = this.props;
+    if (loggedIn) {
+      await onSubmit(answerId, { text: values.comment });
+      setSubmitting(false);
+      resetForm();
+    } else {
+      history.push("/login");
+    }
   };
 
   render() {

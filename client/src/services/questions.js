@@ -2,8 +2,12 @@ import request from "../utils/request";
 import token from "../utils/token";
 
 export class QuestionService {
-  static fetchAll = async () => {
-    const questions = await (await request(`/api/q`, "GET", {})).json();
+  static fetchAll = async page => {
+    const questions = await (await request(
+      `/api/q?page=${page}`,
+      "GET",
+      {}
+    )).json();
     return questions;
   };
 

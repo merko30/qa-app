@@ -21,7 +21,7 @@ const create = async (req, res, next) => {
     });
     res.json({ answer: toReturn });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -36,7 +36,7 @@ const update = async (req, res, next) => {
     });
     res.json({ answer: newAnswer });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -46,7 +46,7 @@ const remove = async (req, res, next) => {
     await Answer.destroy({ where: { id } });
     res.json({ id });
   } catch (error) {
-    res.status(400).json({ messsage: error.message });
+    next(error);
   }
 };
 

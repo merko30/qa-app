@@ -6,3 +6,8 @@
   margin: 0 auto;
   width: 80%;
 }
+
+.icons {
+  min-width: 60px;
+  align-self: start;
+}

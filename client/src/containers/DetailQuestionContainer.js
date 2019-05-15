@@ -18,27 +18,27 @@ import AnswerForm from "../components/forms/AnswerForm";
 let PAGE = 1;
 
 export class DetailQuestionContainer extends Component {
-  componentWillMount() {
-    window.addEventListener("scroll", throttle(this.checkForMore, 500));
-  }
-
   checkForMore = () => {
+    console.log("checking");
     const top = window.scrollY + window.innerHeight;
     const loadMore = document.getElementById("load");
     const { getMoreAnswers, id, question, meta } = this.props;
     const hasMore = question.answers.length !== question.answerCount;
-    if (top > loadMore.offsetTop && hasMore) {
+    if (loadMore && top > loadMore.offsetTop && hasMore) {
       getMoreAnswers(id, meta.next);
     }
   };
 
+  throttledCheck = throttle(this.checkForMore, 500);
+
   componentDidMount() {
+    window.addEventListener("scroll", this.throttledCheck, false);
     const { getQuestion, id } = this.props;
     getQuestion(id, PAGE);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", throttle(this.checkForMore, 500));
+    window.removeEventListener("scroll", this.throttledCheck, false);
   }
 
   render() {
@@ -53,7 +53,8 @@ export class DetailQuestionContainer extends Component {
       like,
       dislike,
       addComment,
-      answersLoading
+      answersLoading,
+      meta
     } = this.props;
     return (
       <div>
@@ -64,14 +65,14 @@ export class DetailQuestionContainer extends Component {
         )}
         {error && <Error error={error} />}
         {question && !error && !loading && (
-          <div className="container mx-auto mt-5">
+          <div className="container mx-auto my-5">
             <h3 style={{ wordBreak: "break-word" }}>{question.text}</h3>
             <div>
               <span className="badge badge-light px-0">
                 {distanceInWordsToNow(question.createdAt)} ago
               </span>
               <div className="pull-right">
-                <p>by {question.user.name}</p>
+                <p>By {question.user.name}</p>
               </div>
             </div>
             <AnswerForm
@@ -90,12 +91,11 @@ export class DetailQuestionContainer extends Component {
               dislike={dislike}
               addComment={addComment}
             />
+
+            {question.answerCount > meta.perPage && <div id="load" />}
+            {answersLoading && <p>loading...</p>}
           </div>
         )}
-        <div id="load">
-          <p>load more</p>
-        </div>
-        {answersLoading && <p>loading...</p>}
       </div>
     );
   }

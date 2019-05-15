@@ -35,28 +35,32 @@ export class LoginForm extends React.Component {
         }}
         render={({ isSubmitting }) => {
           return (
-            <Form>
-              <Field
-                type="text"
-                name="email"
-                placeholder="Email address"
-                component={TextField}
-              />
+            <div className="jumbotron">
+              <h1 className="display-6">Sign in</h1>
+              <hr className="my-3" />
+              <Form>
+                <Field
+                  type="text"
+                  name="email"
+                  placeholder="Email address"
+                  component={TextField}
+                />
 
-              <Field
-                type="password"
-                name="password"
-                placeholder="Your password"
-                component={TextField}
-              />
+                <Field
+                  type="password"
+                  name="password"
+                  placeholder="Your password"
+                  component={TextField}
+                />
 
-              <Button variant="success" type="submit">
-                Sign In
-              </Button>
-              <Link to="/forgot" className="ml-2">
-                Forgot the password ?
-              </Link>
-            </Form>
+                <Button variant="success" type="submit">
+                  Sign In
+                </Button>
+                <Link to="/forgot" className="ml-2">
+                  Forgot the password ?
+                </Link>
+              </Form>
+            </div>
           );
         }}
       />

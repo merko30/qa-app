@@ -28,7 +28,8 @@ const initialState = {
   error: null,
   question: null,
   answersLoading: false,
-  singleMeta: null
+  singleMeta: null,
+  meta: null
 };
 
 export default function(state = initialState, action) {
@@ -51,7 +52,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        questions: action.payload.questions
+        questions: action.payload.questions,
+        meta: action.payload.meta
       };
     case FETCH_QUESTION_SUCCESS:
       return {
