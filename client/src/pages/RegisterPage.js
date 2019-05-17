@@ -7,6 +7,7 @@ import RegisterForm from "../components/forms/RegisterForm";
 import FormWrapper from "../layout/FormWrapper";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import Message from "../components/Message";
 
 class RegisterPage extends Component {
   onSubmit = data => {
@@ -15,10 +16,11 @@ class RegisterPage extends Component {
   };
 
   render() {
-    const { error, loading } = this.props;
+    const { error, loading, message } = this.props;
     return (
       <FormWrapper>
         {error && <Error error={error} />}
+        {message && <Message message={message} />}
         {loading && <Loading />}
         <RegisterForm onSubmit={this.onSubmit} />
       </FormWrapper>
@@ -27,6 +29,6 @@ class RegisterPage extends Component {
 }
 
 export default connect(
-  ({ auth: { loading, error } }) => ({ loading, error }),
+  ({ auth: { loading, error, message } }) => ({ loading, error, message }),
   { register }
 )(RegisterPage);

@@ -66,7 +66,8 @@ export default function(state = initialState, action) {
     case REGISTER_SUCCESS:
       return {
         ...state,
-        loading: false
+        loading: false,
+        message: action.payload.message
       };
     case REGISTER_FAILURE:
     case LOGIN_FAILURE:

@@ -48,8 +48,7 @@ export class QuestionContainer extends Component {
       editQuestion,
       loggedIn,
       error,
-      meta,
-      getQuestions
+      meta
     } = this.props;
     const { active } = this.state;
     return (
@@ -63,17 +62,25 @@ export class QuestionContainer extends Component {
         )}
         {questions && meta && (
           <>
-            <QuestionList
-              questions={questions}
-              editQuestion={editQuestion}
-              removeQuestion={removeQuestion}
-              loggedIn={loggedIn}
-            />
-            <PaginationComponent
-              pages={this.items()}
-              onClick={this.onClick}
-              active={active}
-            />
+            {questions.length > 0 ? (
+              <QuestionList
+                questions={questions}
+                editQuestion={editQuestion}
+                removeQuestion={removeQuestion}
+                loggedIn={loggedIn}
+              />
+            ) : (
+              <h2 className="my-4 lead text-center text-secondary">
+                There are no questions, feel free to be first to ask!
+              </h2>
+            )}
+            {questions.length > meta.perPage && (
+              <PaginationComponent
+                pages={this.items()}
+                onClick={this.onClick}
+                active={active}
+              />
+            )}
           </>
         )}
       </div>

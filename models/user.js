@@ -28,8 +28,8 @@ module.exports = (sequelize, type) => {
         allowNull: false,
         validate: {
           len: {
-            args: [8, 250],
-            msg: "Username must be longer than 8 characters"
+            args: [6, 250],
+            msg: "Username must be longer than 6 characters"
           }
         }
       },

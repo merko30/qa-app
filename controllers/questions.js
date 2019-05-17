@@ -61,22 +61,24 @@ const findOne = async (req, res, next) => {
         { model: User },
         {
           model: Answer,
+          as: "answers",
           attributes: {
             include: [
-              [
-                Sequelize.fn("COUNT", Sequelize.col("likes.answerId")),
-                "likeCount"
-              ]
+              Sequelize.fn("COUNT", Sequelize.col("likes.id")),
+              "likeCount"
             ]
           },
           include: [
             { model: User },
-            { model: Like, include: { model: User }, attributes: ["id"] },
+            {
+              model: Like,
+              include: { model: User }
+            },
             { model: Comment, include: { model: User } }
           ],
           limit: perPage,
           offset: perPage * (page - 1),
-          group: "answer.id"
+          group: ["answer.id", "likes.id", "comments.id"]
         }
       ]
     });

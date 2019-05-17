@@ -39,7 +39,9 @@ const register = async (req, res, next) => {
       if (!created) {
         throw new Error("User exists");
       } else {
-        user.avatar = req.file.filename;
+        if (req.file) {
+          user.avatar = req.file.filename;
+        }
         await user.save();
         VerificationToken.create({
           userId: user.id,
@@ -191,15 +193,19 @@ const changeAvatar = async (req, res, next) => {
     const user = await User.findOne({
       where: { id: req.user.id }
     });
-    user.avatar = req.file.filename;
-    await user.save();
-    const toReturn = await User.findOne({
-      where: { id: req.user.id },
-      include
-    });
-    res.json({
-      user: toReturn
-    });
+    if (req.file) {
+      user.avatar = req.file.filename;
+      await user.save();
+      const toReturn = await User.findOne({
+        where: { id: req.user.id },
+        include
+      });
+      res.json({
+        user: toReturn
+      });
+    } else {
+      throw new Error("You must pick an image!");
+    }
   } catch (error) {
     next(error);
   }

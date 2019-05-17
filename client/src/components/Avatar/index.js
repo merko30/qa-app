@@ -38,7 +38,9 @@ class Avatar extends React.Component {
   render() {
     const { src, onEdit, handleToggle, alt, editable } = this.props;
     const imageSrc =
-      src === "" ? defaultImage : process.env.REACT_APP_HOST_UPLOADS + src;
+      src === "" || src === null
+        ? defaultImage
+        : process.env.REACT_APP_HOST_UPLOADS + src;
     return (
       <div className="row mx-auto">
         {!editable ? (
@@ -72,6 +74,7 @@ class Avatar extends React.Component {
                   "Unsupported Format",
                   value => value && SUPPORTED_FORMATS.includes(value.type)
                 )
+                .required("You must pick an image to proceed")
             }}
             onSubmit={async values => {
               onEdit(values);

@@ -5,6 +5,7 @@ import LoginForm from "../components/forms/LoginForm";
 import FormWrapper from "../layout/FormWrapper";
 import Error from "../components/Error";
 import Loading from "../components/Loading";
+import Message from "../components/Message";
 
 import { login } from "../actions/auth";
 
@@ -20,7 +21,7 @@ class LoginPage extends Component {
     return (
       <FormWrapper>
         {error && <Error error={error} />}
-        {message && <p>{message}</p>}
+        {message && <Message message={message} />}
         {loading && <Loading />}
         <LoginForm onSubmit={this.onSubmit} />
       </FormWrapper>

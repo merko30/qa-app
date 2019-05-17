@@ -28,7 +28,7 @@ export const register = data => async dispatch => {
 
     const jsonResponse = await response.json();
     if (response.ok) {
-      dispatch(registerAction.success());
+      dispatch(registerAction.success(jsonResponse));
       dispatch(clearError());
       history.push("/login");
     } else {

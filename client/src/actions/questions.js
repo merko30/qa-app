@@ -4,6 +4,8 @@ import {
   REMOVE_ANSWER_FROM_QUESTION
 } from "../constants/questions";
 
+import history from "../config/history";
+
 import { QuestionService } from "../services/questions";
 
 import createAction from "../utils/createAction";
@@ -36,7 +38,6 @@ export const getQuestion = (id, page) => async dispatch => {
 };
 
 export const getMoreAnswers = (id, page) => async dispatch => {
-  console.log("here in action");
   dispatch(fetchMore.start());
   try {
     const response = await QuestionService.fetchOneRequest(id, page);
@@ -51,6 +52,7 @@ export const addQuestion = data => async dispatch => {
   try {
     const { question } = await QuestionService.addQuestionRequest(data);
     dispatch(add.success(question));
+    history.push(`/questions/${question.id}`);
   } catch (error) {
     dispatch(add.failure(error));
   }
