@@ -6,6 +6,8 @@ import { faCheck, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 
 import "./index.css";
 
+const MAX_SIZE = 1024*1024*5;
+
 const actions = [
   <button key={0} className="button close-button-icon" type="button">
     <FontAwesomeIcon icon={faWindowClose} />
@@ -39,7 +41,7 @@ class AvatarField extends Component {
     return (
       <div className="d-flex">
         <div className="image">
-          <AvatarImageCr apply={this.apply} actions={actions} />
+          <AvatarImageCr apply={this.apply} actions={actions} maxsize={MAX_SIZE} />
           {errors["avatar"] && (
             <small className="text-danger text-uppercase text-weight-bold">
               {errors["avatar"]}

@@ -23,16 +23,16 @@ const registerSchema = Yup.object().shape({
     .required("Required"),
   name: Yup.string()
     .min(6, "Your name should be longer than 6 characters")
-    .required("Required")
-  // avatar: Yup.mixed()
-  //   .test("fileSize", "File is too large", value => {
-  //     return value && value.size >= FILE_SIZE;
-  //   })
-  //   .test(
-  //     "fileFormat",
-  //     "Unsupported Format",
-  //     value => value && SUPPORTED_FORMATS.includes(value.type)
-  //   )
+    .required("Required"),
+  avatar: Yup.mixed()
+    .test("fileSize", "File is too large", value => {
+      return value && value.size <= FILE_SIZE;
+    })
+    .test(
+      "fileFormat",
+      "Unsupported Format",
+      value => value && SUPPORTED_FORMATS.includes(value.type)
+    )
 });
 
 export class RegisterForm extends React.Component {
