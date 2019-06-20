@@ -62,12 +62,6 @@ const findOne = async (req, res, next) => {
         {
           model: Answer,
           as: "answers",
-          attributes: {
-            include: [
-              Sequelize.fn("COUNT", Sequelize.col("likes.id")),
-              "likeCount"
-            ]
-          },
           include: [
             { model: User },
             {
