@@ -35,7 +35,7 @@ export class LoginForm extends React.Component {
         }}
         render={({ isSubmitting }) => {
           return (
-            <div className="jumbotron">
+            <div >
               <h1 className="display-6">Sign in</h1>
               <hr className="my-3" />
               <Form>

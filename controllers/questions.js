@@ -20,6 +20,7 @@ const include = [
 ];
 
 const findAll = async (req, res, next) => {
+  console.log('here');
   let { page = 1 } = req.query;
   try {
     const { rows, count } = await Question.findAndCountAll({
@@ -50,6 +51,7 @@ const findOne = async (req, res, next) => {
         "createdAt",
         "updatedAt",
         "id",
+        "title",
         [
           Sequelize.literal(
             `(SELECT COUNT(*) FROM answers WHERE questionId = ${id})`
@@ -72,7 +74,7 @@ const findOne = async (req, res, next) => {
           ],
           limit: perPage,
           offset: perPage * (page - 1),
-          group: ["answer.id", "likes.id", "comments.id"]
+          group: ["answer.id", "likes.id", "comments.id",]
         }
       ]
     });
@@ -84,9 +86,9 @@ const findOne = async (req, res, next) => {
 };
 
 const create = async (req, res, next) => {
-  const { text } = req.body;
+  const { text, title } = req.body;
   try {
-    const question = await Question.create({ text, userId: req.user.id });
+    const question = await Question.create({ title, text , userId: req.user.id });
     const withAssociations = await Question.findOne({
       where: { id: question.id },
       include
@@ -99,9 +101,8 @@ const create = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   const { id } = req.params;
-  const { text } = req.body;
   try {
-    await Question.update({ text }, { where: { id } });
+    await Question.update(req.body, { where: { id } });
     const withAssociations = await Question.findOne({
       where: { id },
       include

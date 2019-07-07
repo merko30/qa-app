@@ -2,10 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export default function Icon({ icon, onClick }) {
+export default function Icon({ icon, onClick, classes }) {
   return (
     <span
-      className="p-2"
+      className={`pt-1 ${classes}`}
       onClick={onClick}
       style={{ zIndex: 2 }}
       data-testid="icon"

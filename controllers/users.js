@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 const async = require("async");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-// const Op = require("sequelize").Op;
 
 const {
   Question,
@@ -11,8 +10,8 @@ const {
   VerificationToken
 } = require("../config/database");
 
-const transport = require("../config/emailTransport");
 const sendVerificationEmail = require("../utils/sendVerificationEmail");
+const sendPasswordChangeConfirmation = require('../utils/sendPasswordChangeConfirmation');
 
 const include = [{ model: Answer, offset: 5, limit: 5 }, { model: Question }];
 
@@ -151,19 +150,7 @@ const reset = function(req, res, next) {
         });
       },
       function(user, done) {
-        var mailOptions = {
-          to: user.email,
-          from: "app@fake.com",
-          subject: "Password Reset",
-          text:
-            "Hello,\n\n" +
-            "This is a confirmation that the password for your account " +
-            user.email +
-            " has just been changed.\n"
-        };
-        transport.sendMail(mailOptions, function(err) {
-          done(err);
-        });
+        sendPasswordChangeConfirmation(user.email, done);
       }
     ],
     function(err) {

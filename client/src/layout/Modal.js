@@ -7,7 +7,7 @@ class MyModal extends React.Component {
   render() {
     const { children, title, show, handleClose } = this.props;
     return (
-      <>
+      
         <Modal show={show} onHide={handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>{title}</Modal.Title>
@@ -23,8 +23,8 @@ class MyModal extends React.Component {
             </Button>
           </Modal.Footer>
         </Modal>
-      </>
-    );
+      
+    )
   }
 }
 

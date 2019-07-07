@@ -18,12 +18,14 @@ class RegisterPage extends Component {
   render() {
     const { error, loading, message } = this.props;
     return (
+      <div className="container my-5">
       <FormWrapper>
         {error && <Error error={error} />}
         {message && <Message message={message} />}
         {loading && <Loading />}
         <RegisterForm onSubmit={this.onSubmit} />
       </FormWrapper>
+      </div>
     );
   }
 }

@@ -65,7 +65,7 @@ export class DetailQuestionContainer extends Component {
         )}
         {error && <Error error={error} />}
         {question && !error && !loading && (
-          <div className="container mx-auto my-5">
+          <div className="container mx-auto my-5 col-md-10 col-sm-12">
             <h3 style={{ wordBreak: "break-word" }}>{question.text}</h3>
             <div>
               <span className="badge badge-light px-0">

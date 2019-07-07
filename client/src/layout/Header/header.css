@@ -1,3 +1,11 @@
 .no-underline:hover {
   text-decoration: none;
 }
+
+.bg {
+  background: white;
+  border-bottom: 1px solid #ededed;
+  color: #333;
+
+ 
+}

@@ -59,7 +59,8 @@ class Question extends Component {
         id,
         user: { name },
         answers,
-        userId
+        userId,
+        title
       },
       editQuestion,
       loggedIn
@@ -73,7 +74,10 @@ class Question extends Component {
           <AnswerCount answers={answers} />
           <div className="d-flex align-items-center justify-content-between w-100">
             <Link to={`/questions/${id}`} className="text-dark no-underline">
-              <h3 className="col-10 word-wrap my-2 pl-4 pr-0">{text}</h3>
+              <h3 className="col-10 word-wrap my-2 pl-4 pr-0">{title}</h3>
+              <h6 className="col-10 word-wrap my-2 pl-4 pr-0 text-shorten">
+                {text}
+              </h6>
               <div className="d-flex pl-4">
                 <p className="mb-0 mr-2">
                   <strong>{name}</strong>
@@ -82,8 +86,8 @@ class Question extends Component {
               </div>
             </Link>
             {userMatchesAuthor && (
-              <div className="align-self-start d-flex cursor-pointer">
-                <Icon icon={faPen} onClick={this.handleShow} />
+              <div className="d-flex cursor-pointer pos">
+                <Icon icon={faPen} onClick={this.handleShow} classes="mr-2" />
                 <MyModal handleClose={this.handleClose} show={show}>
                   <QuestionForm
                     mode="edit"

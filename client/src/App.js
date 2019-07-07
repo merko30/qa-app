@@ -1,8 +1,8 @@
 import React from "react";
 
 import "bootstrap/dist/css/bootstrap.css";
-
-import { Container } from "react-bootstrap";
+import "bootstrap/dist/js/bootstrap.min.js";
+import './app.css';
 
 import Routes from "./routes";
 import Header from "./layout/Header";
@@ -11,9 +11,9 @@ function App() {
   return (
     <div>
       <Header />
-      <Container fluid>
+      <div className="container">
         <Routes />
-      </Container>
+      </div>
     </div>
   );
 }

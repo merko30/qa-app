@@ -117,19 +117,22 @@ class ProfilePage extends Component {
               </Tab>
               <Tab eventKey="privacy" title="Security settings">
                 <div className="mt-4">
+                  <label>Change your email</label>
                   <Email
                     editable={emailEditable}
                     onSubmit={changeEmail}
                     email={user.email}
                     handleToggle={this.handleToggleEmail}
                   />
-
+                  <hr />
+                  <label>Change your password</label>
                   <Password
                     editable={passwordEditable}
                     onSubmit={changePassword}
                     handleToggle={this.handlePasswordEditable}
                   />
-
+                  <hr />
+                  <label>Remove your account</label>
                   <RemoveAccount
                     onSubmit={deleteUser}
                     editable={deleteEditable}

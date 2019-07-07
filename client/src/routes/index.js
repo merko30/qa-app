@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
-import { Container } from "react-bootstrap";
 
 import GuestRoute from "./GuestRoute";
 import PrivateRoute from "./PrivateRoute";
@@ -19,7 +18,7 @@ import {
 export default class Routes extends Component {
   render() {
     return (
-      <Container fluid>
+      <div >
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/questions/:id" component={DetailPage} />
@@ -31,7 +30,7 @@ export default class Routes extends Component {
           <PrivateRoute path="/profile" component={ProfilePage} />
           <GuestRoute path="*" component={NotFound} />
         </Switch>
-      </Container>
+      </div>
     );
   }
 }

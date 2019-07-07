@@ -4,11 +4,15 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
 
-import TextArea from "../TextField";
+import TextArea from "../TextArea";
+import TextField from "../TextField";
 
 const questionSchema = Yup.object().shape({
-  question: Yup.string()
-    .min(16, "Question should be longer than 16 characters")
+  title: Yup.string()
+    .min(16, "Question title should be longer than 16 characters")
+    .required("Required"),
+  text: Yup.string()
+    .min(25, "Question should be longer than 25 characters")
     .required("Required")
 });
 
@@ -17,6 +21,7 @@ export default class QuestionForm extends React.Component {
     onSubmit: PropTypes.func.isRequired,
     mode: PropTypes.string,
     question: PropTypes.shape({
+      title: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired
     })
@@ -32,15 +37,16 @@ export default class QuestionForm extends React.Component {
     return (
       <Formik
         initialValues={{
-          question: editMode ? question.text : ""
+          text: editMode ? question.text : "",
+          title: editMode ? question.title : ""
         }}
         validationSchema={questionSchema}
-        onSubmit={async values => {
+        onSubmit={async ({ text, title }) => {
           if (editMode) {
-            await onSubmit(question.id, { text: values.question });
+            await onSubmit(question.id, { text, title });
             handleClose();
           } else {
-            await onSubmit({ text: values.question });
+            await onSubmit({ text, title });
             handleClose();
           }
         }}
@@ -49,7 +55,13 @@ export default class QuestionForm extends React.Component {
             <Form>
               <Field
                 type="text"
-                name="question"
+                name="title"
+                placeholder="Question title"
+                component={TextField}
+              />
+              <Field
+                type="text"
+                name="text"
                 placeholder="Your question"
                 component={TextArea}
               />

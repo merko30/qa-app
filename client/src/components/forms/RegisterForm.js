@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import { Form, Field, Formik } from "formik";
 import * as Yup from "yup";
 import Button from "react-bootstrap/Button";
+import "../../app.css";
 
+import MyModal from "../../layout/Modal";
 import TextField from "../TextField";
 import AvatarField from "../AvatarField";
 
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
-
-const FILE_SIZE = 1024 * 1024 * 5;
+import getBase64 from "../../utils/getBase64";
 
 const registerSchema = Yup.object().shape({
   password: Yup.string()
@@ -23,16 +23,7 @@ const registerSchema = Yup.object().shape({
     .required("Required"),
   name: Yup.string()
     .min(6, "Your name should be longer than 6 characters")
-    .required("Required"),
-  avatar: Yup.mixed()
-    .test("fileSize", "File is too large", value => {
-      return value && value.size <= FILE_SIZE;
-    })
-    .test(
-      "fileFormat",
-      "Unsupported Format",
-      value => value && SUPPORTED_FORMATS.includes(value.type)
-    )
+    .required("Required")
 });
 
 export class RegisterForm extends React.Component {
@@ -41,10 +32,32 @@ export class RegisterForm extends React.Component {
   };
 
   state = {
-    src: ""
+    imageSrc: null,
+    crop: { x: 0, y: 0 },
+    showCropModal: false,
+    croppedImage: null
   };
 
-  setSrc = src => this.setState({ src });
+  setCroppedImage = croppedImage => {
+    this.setState({ croppedImage });
+  };
+
+  toggleModal = () => {
+    this.setState({ showCropModal: !this.state.showCropModal });
+  };
+
+  setImage = imageSrc => {
+    this.setState({ imageSrc });
+  };
+
+  handleChange = e => {
+    if (e.target.files.length > 0) {
+      getBase64(e.target.files[0], this.setImage);
+      this.setState({ showCropModal: true });
+      // allows to use change to same image
+      e.target.value = "";
+    }
+  };
 
   render() {
     const { onSubmit } = this.props;
@@ -61,18 +74,37 @@ export class RegisterForm extends React.Component {
         onSubmit={values => {
           onSubmit(values);
         }}
-        render={({ errors, setFieldValue }) => {
+        render={({ errors, setFieldValue, values: { avatar } }) => {
           return (
-            <div className="jumbotron">
+            <div>
               <h1 className="display-6">Sign up today</h1>
               <hr className="my-3" />
               <Form>
-                <AvatarField
-                  src={this.state.src}
-                  onChange={this.setSrc}
-                  errors={errors}
-                  setFieldValue={setFieldValue}
+                {this.state.croppedImage && (
+                  <img
+                    src={URL.createObjectURL(this.state.croppedImage)}
+                    alt="example"
+                    className="rounded-circle my-3"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="form-control"
+                  onChange={this.handleChange}
                 />
+
+                <MyModal
+                  handleClose={this.toggleModal}
+                  show={this.state.showCropModal}
+                >
+                  <AvatarField
+                    setFieldValue={setFieldValue}
+                    src={this.state.imageSrc}
+                    setImage={this.setImage}
+                    setCroppedImage={this.setCroppedImage}
+                  />
+                </MyModal>
 
                 <Field
                   type="text"

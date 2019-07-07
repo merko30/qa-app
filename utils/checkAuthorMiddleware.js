@@ -12,13 +12,10 @@ module.exports = param =>
       doc = await Answer.findOne({ where: { id } });
     } else if (param === "like") {
       doc = await Like.findOne({ where: { id } });
-      console.log(id);
-      console.log(doc);
     } else if (param === "comment") {
       doc = await Comment.findOne({ where: { id } });
     }
-    const matches = doc.userId === req.user.id;
-    if (matches) {
+    if (doc.userId === req.user.id) {
       return next();
     } else {
       res.status(401).json({ message: "Unauthorized" });

@@ -5,11 +5,20 @@ module.exports = (sequelize, type) => {
       primaryKey: true,
       autoIncrement: true
     },
-    text: {
+    title: {
       type: type.STRING,
       validate: {
         len: {
-          args: [16, 150],
+          args: [16,100],  
+          msg: "Question title length must be between 16 and 100 characters."
+        }
+      }
+    },
+    text: {
+      type: type.TEXT,
+      validate: {
+        len: {
+          args: [25, 500],
           msg: "Question must have at least 16 characters."
         }
       }
