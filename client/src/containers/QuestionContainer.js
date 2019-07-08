@@ -7,6 +7,7 @@ import {
   removeQuestion,
   editQuestion
 } from "../actions/questions";
+import { searchByTag } from "../actions/tags";
 import CenterWrapper from "../layout/CenterWrapper";
 import Loading from "../components/Loading";
 import Error from "../components/Error";
@@ -48,7 +49,8 @@ export class QuestionContainer extends Component {
       editQuestion,
       loggedIn,
       error,
-      meta
+      meta,
+      searchByTag
     } = this.props;
     const { active } = this.state;
     return (
@@ -68,6 +70,7 @@ export class QuestionContainer extends Component {
                 editQuestion={editQuestion}
                 removeQuestion={removeQuestion}
                 loggedIn={loggedIn}
+                searchByTag={searchByTag}
               />
             ) : (
               <h2 className="my-4 lead text-center text-secondary">
@@ -101,5 +104,5 @@ const mapStateToProps = ({
 
 export default connect(
   mapStateToProps,
-  { getQuestions, editQuestion, removeQuestion }
+  { getQuestions, editQuestion, removeQuestion, searchByTag }
 )(QuestionContainer);

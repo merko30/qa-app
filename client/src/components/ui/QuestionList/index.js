@@ -12,7 +12,13 @@ export default class QuestionList extends Component {
   };
 
   render() {
-    const { questions, editQuestion, removeQuestion, loggedIn } = this.props;
+    const {
+      questions,
+      editQuestion,
+      removeQuestion,
+      loggedIn,
+      searchByTag
+    } = this.props;
     return (
       <div className="row mt-5">
         {questions &&
@@ -24,6 +30,7 @@ export default class QuestionList extends Component {
                 editQuestion={editQuestion}
                 removeQuestion={removeQuestion}
                 loggedIn={loggedIn}
+                searchByTag={searchByTag}
               />
             );
           })}

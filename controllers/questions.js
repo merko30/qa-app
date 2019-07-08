@@ -1,11 +1,19 @@
 const Sequelize = require("sequelize");
-const { Question, User, Answer, Like, Comment } = require("../config/database");
+const {
+  Question,
+  User,
+  Answer,
+  Like,
+  Comment,
+  Tag
+} = require("../config/database");
 
 const perPage = 6;
 const questionsPerPage = 12;
 
 const include = [
   { model: User },
+  { model: Tag },
   {
     model: Answer,
     include: [
@@ -20,7 +28,6 @@ const include = [
 ];
 
 const findAll = async (req, res, next) => {
-  console.log('here');
   let { page = 1 } = req.query;
   try {
     const { rows, count } = await Question.findAndCountAll({
@@ -61,6 +68,7 @@ const findOne = async (req, res, next) => {
       ],
       include: [
         { model: User },
+        { model: Tag },
         {
           model: Answer,
           as: "answers",
@@ -74,7 +82,7 @@ const findOne = async (req, res, next) => {
           ],
           limit: perPage,
           offset: perPage * (page - 1),
-          group: ["answer.id", "likes.id", "comments.id",]
+          group: ["answer.id", "likes.id", "comments.id"]
         }
       ]
     });
@@ -88,7 +96,13 @@ const findOne = async (req, res, next) => {
 const create = async (req, res, next) => {
   const { text, title } = req.body;
   try {
-    const question = await Question.create({ title, text , userId: req.user.id });
+    const question = await Question.create({
+      title,
+      text,
+      userId: req.user.id
+    });
+    question.addTags(req.body.tags);
+    question.save();
     const withAssociations = await Question.findOne({
       where: { id: question.id },
       include

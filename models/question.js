@@ -9,7 +9,7 @@ module.exports = (sequelize, type) => {
       type: type.STRING,
       validate: {
         len: {
-          args: [16,100],  
+          args: [16, 100],
           msg: "Question title length must be between 16 and 100 characters."
         }
       }
@@ -25,9 +25,10 @@ module.exports = (sequelize, type) => {
     }
   });
 
-  Question.associate = ({ User, Answer }) => {
+  Question.associate = ({ User, Answer, Tag }) => {
     Question.belongsTo(User);
     Question.hasMany(Answer, { onDelete: "set null" });
+    Question.hasMany(Tag, { onDelete: "set null" });
   };
 
   return Question;

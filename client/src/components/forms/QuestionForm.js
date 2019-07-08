@@ -7,6 +7,8 @@ import Button from "react-bootstrap/Button";
 import TextArea from "../TextArea";
 import TextField from "../TextField";
 
+import Select from "react-select";
+
 const questionSchema = Yup.object().shape({
   title: Yup.string()
     .min(16, "Question title should be longer than 16 characters")
@@ -31,7 +33,29 @@ export default class QuestionForm extends React.Component {
     mode: "add"
   };
 
+  state = {
+    options: []
+  };
+
+  async componentDidMount() {
+    const { tags } = await (await fetch("/api/tags", {
+      headers: {
+        "Content-type": "application/json"
+      },
+      method: "GET"
+    })).json();
+
+    this.setState({
+      options: tags.map(tag => ({ label: tag.name, value: tag.id }))
+    });
+  }
+
+  onSelectChange = (values, setField) => {
+    setField("tags", values.map(v => v.value));
+  };
+
   render() {
+    const { options } = this.state;
     const { onSubmit, question, mode = "add", handleClose } = this.props;
     const editMode = mode === "edit";
     return (
@@ -41,16 +65,16 @@ export default class QuestionForm extends React.Component {
           title: editMode ? question.title : ""
         }}
         validationSchema={questionSchema}
-        onSubmit={async ({ text, title }) => {
+        onSubmit={async values => {
           if (editMode) {
-            await onSubmit(question.id, { text, title });
+            await onSubmit(question.id, values);
             handleClose();
           } else {
-            await onSubmit({ text, title });
+            await onSubmit(values);
             handleClose();
           }
         }}
-        render={({ isSubmitting }) => {
+        render={({ isSubmitting, setFieldValue }) => {
           return (
             <Form>
               <Field
@@ -64,6 +88,14 @@ export default class QuestionForm extends React.Component {
                 name="text"
                 placeholder="Your question"
                 component={TextArea}
+              />
+
+              <Select
+                options={options}
+                isMulti={true}
+                onChange={values => this.onSelectChange(values, setFieldValue)}
+                className="my-2"
+                placeholder="Select tags..."
               />
 
               <Button variant="success" type="submit" disabled={isSubmitting}>

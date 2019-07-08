@@ -11,6 +11,7 @@ import MyModal from "../../../layout/Modal";
 import Icon from "../../Icon";
 import AnswerCount from "./AnswerCount";
 import Confirmation from "../../Confirmation";
+import Tag from "../../Tag";
 
 class Question extends Component {
   static propTypes = {
@@ -60,9 +61,11 @@ class Question extends Component {
         user: { name },
         answers,
         userId,
-        title
+        title,
+        tags
       },
       editQuestion,
+      searchByTag,
       loggedIn
     } = this.props;
     const userID = localStorage.getItem("userId");
@@ -72,19 +75,24 @@ class Question extends Component {
       <div className="col-md-8 col-md-offset-2 col-sm-12 col-xs-12 mx-auto my-2">
         <div className="d-flex align-items-center w-100">
           <AnswerCount answers={answers} />
-          <div className="d-flex align-items-center justify-content-between w-100">
-            <Link to={`/questions/${id}`} className="text-dark no-underline">
-              <h3 className="col-10 word-wrap my-2 pl-4 pr-0">{title}</h3>
-              <h6 className="col-10 word-wrap my-2 pl-4 pr-0 text-shorten">
-                {text}
-              </h6>
-              <div className="d-flex pl-4">
-                <p className="mb-0 mr-2">
-                  <strong>{name}</strong>
-                </p>
-                <p>{distanceInWordsToNow(createdAt)} ago</p>
-              </div>
-            </Link>
+          <div className="w-100">
+            <h3 className="col-10 word-wrap my-2 pl-4 pr-0">
+              <Link to={`/questions/${id}`} className="text-dark no-underline">
+                {title}
+              </Link>
+            </h3>
+            <h6 className="col-10 word-wrap my-2 pl-4 pr-0 text-shorten">
+              {text}
+            </h6>
+            <div className="d-flex pl-4">
+              <p className="mb-0 mr-2">
+                <strong>by {name}</strong>
+              </p>
+              <p>{distanceInWordsToNow(createdAt)} ago</p>
+            </div>
+            {tags.map(tag => (
+              <Tag name={tag.name} key={tag.id} onClick={searchByTag} />
+            ))}
             {userMatchesAuthor && (
               <div className="d-flex cursor-pointer pos">
                 <Icon icon={faPen} onClick={this.handleShow} classes="mr-2" />
